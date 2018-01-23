@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class Dao {
     
     
@@ -32,16 +33,15 @@ public class Dao {
 //             
 //         }
         
-    public void Conectar(){
+    public void Conectar()  {
         try {
-            //Class.forName("com.mysql.jdbc.Driver");
+           // Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ppf?user=pma&password=pmapass");
             
           
             
-             con = DriverManager.getConnection("jdbc:sqlserver://192.168.100.14;databaseName=Inteligencias", "targit",
-               "targit2015*");
-            
+           con = DriverManager.getConnection("jdbc:sqlserver://192.168.100.14;databaseName=Inteligencias", "targit", "targit2015*");
+           //    con = DriverManager.getConnection("jdbc:sqlserver://Contab");
              
           
             

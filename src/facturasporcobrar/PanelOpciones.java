@@ -42,7 +42,7 @@ public class PanelOpciones extends JFrame {
 
     
 
-    public PanelOpciones() {
+    public PanelOpciones(String Proceso ) {
         super("JPanel Demo Program");
 
             
@@ -182,7 +182,7 @@ public class PanelOpciones extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new PanelOpciones().setVisible(true);
+                new PanelOpciones("").setVisible(true);
             }
         });
     
