@@ -187,5 +187,15 @@ public class PanelOpciones extends JFrame {
         });
     
     }
+
+    public void setJbuttons(JButton[] jbuttons) {
+        this.jbuttons = jbuttons;
+    }
+
+    public JButton[] getJbuttons() {
+        return jbuttons;
+    }
+    
+    
     
 }

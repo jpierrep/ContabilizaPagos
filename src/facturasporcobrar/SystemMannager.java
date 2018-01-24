@@ -7,10 +7,15 @@ package facturasporcobrar;
 
 import Dao.GetData;
 import Model.FacturaXC;
+import Model.Opciones;
 import Model.Pago;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +29,7 @@ public class SystemMannager {
     GetData data=new GetData();
     Transacciones transInicial= new Transacciones();
     Transacciones transVer= new Transacciones();
+    PanelOpciones panelOpciones=new PanelOpciones("aa");
     
     
    public List<FacturaXC> getFacturasConSaldo(){
@@ -54,13 +60,20 @@ public class SystemMannager {
       transInicial.llenarTabla();
      // transInicial.llenarTabla(titulos, data.getPagosSoft(transInicial.empresa));
    
-     transInicial.getjComboBox1().addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+     transInicial.getjComboBox1().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
             }
 
         });
          transInicial.setVisible(true);
+         
+     transInicial.getjButton1().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+
+        });
   }
      
      private void jComboBox2ActionPerformed(ActionEvent evt) {
@@ -76,8 +89,46 @@ public class SystemMannager {
              transInicial.setLista(getPagos());
              transInicial.llenarTabla();
      }
-      
-      
+     
+     private void jButton1ActionPerformed(ActionEvent evt) {
+         System.out.println(" se presionó el botón");
+      int i=0;
+        for(JButton button: panelOpciones.getJbuttons()){
+        
+            button.addActionListener(listener);  
+        i++;
+        }
+         panelOpciones.setVisible(true);
+         
+     }
+     
+     
+          ActionListener listener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() instanceof JButton) {
+                String text = ((JButton) e.getSource()).getName();
+                System.out.println("hola"+ text);
+            
+            }
+        }
+    };
+
+   public List<Opciones> generaOpciones(String proceso){
+   long  cantContabilizar = ((List<Pago>)transInicial.getLista()).stream().filter(
+   a -> Objects.equals(a.getMarca(), 1)||Objects.equals(a.getMarca(), 2)
+
+   ).count();
+       List<Opciones> lista=new ArrayList();
+       if (proceso.equals("PreContabiliza")){
+          Opciones op1=new Opciones("Total Pagos",cantContabilizar+"",true);
+          
+          
+      }
+       return lista;       
+   }
+            
+          
    public static void main(String args[]) {
   
      SystemMannager sys= new SystemMannager();
