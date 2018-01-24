@@ -5,6 +5,8 @@
  */
 package facturasporcobrar;
 
+import Model.Opciones;
+import Model.Pago;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
@@ -32,6 +34,7 @@ public class PanelOpciones extends JFrame {
 
     String[] cabeceraArchivo;
     int cantidadColumnas;
+    List<Opciones> listaOpciones=new ArrayList<>();
 
     
     JButton button1 = new JButton("Mapear Variables");
@@ -42,18 +45,17 @@ public class PanelOpciones extends JFrame {
 
     
 
-    public PanelOpciones(String Proceso ) {
+    public PanelOpciones(String Proceso,List<Opciones> lista ) {
+        
+       
         super("JPanel Demo Program");
 
-            
-             
-        
-
-         cantidadColumnas=3;
-         cabeceraArchivo=new String[3];
-         cabeceraArchivo[0]="1";
-        cabeceraArchivo[1]="2";
-        cabeceraArchivo[2]="3";
+             this.listaOpciones=lista;
+         cantidadColumnas=listaOpciones.size();
+//         cabeceraArchivo=new String[3];
+//         cabeceraArchivo[0]="1";
+//        cabeceraArchivo[1]="2";
+//        cabeceraArchivo[2]="3";
          
         jlabels = new JLabel[cantidadColumnas];
         jtext = new JTextField[cantidadColumnas];
@@ -82,12 +84,15 @@ public class PanelOpciones extends JFrame {
          */
 
         for (int i = 0; i < cantidadColumnas; i++) {
-            jlabels[i] = new JLabel((i + 1) + ". " + cabeceraArchivo[i]);
+            jlabels[i] = new JLabel((i + 1) + ". " + listaOpciones.get(i).getEtiqueta()+" "+listaOpciones.get(i).getValor());
             jtext[i] = new JTextField(5);
             jbuttons[i]= new JButton("Ver");
            
             jbuttons[i].addActionListener(listener);
-            jbuttons[i].setName(i+"");
+            jbuttons[i].setName(i+" "+Proceso);
+            if(!listaOpciones.get(i).isHasButton()){
+              jbuttons[i].setEnabled(false);
+            }
             constraints.gridx = 0;
             ++constraints.gridy;
 
@@ -182,7 +187,7 @@ public class PanelOpciones extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new PanelOpciones("").setVisible(true);
+               // new PanelOpciones("").setVisible(true);
             }
         });
     
@@ -195,7 +200,18 @@ public class PanelOpciones extends JFrame {
     public JButton[] getJbuttons() {
         return jbuttons;
     }
-    
+
+    public List<Opciones> getListaOpciones() {
+        return listaOpciones;
+    }
+
+    public void setListaOpciones(List<Opciones> listaOpciones) {
+        this.listaOpciones = listaOpciones;
+    }
+
+   
+
+
     
     
 }
