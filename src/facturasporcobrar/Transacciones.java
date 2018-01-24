@@ -6,10 +6,12 @@
 package facturasporcobrar;
 
 
+import Dao.GetData;
 import Model.Pago;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,17 +20,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Transacciones extends javax.swing.JFrame {
 
+    int empresa;
+    String[] titulos;
+  Object lista;
     /**
      * Creates new form Transacciones
      */
-    FacturaMannager facturaMannager = new FacturaMannager();
+   // SystemMannager facturaMannager = new SystemMannager();
 
     public Transacciones() {
 
         //       super( "JButtonTable Example" );
         initComponents();
-   
-        llenarTabla();
+     jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GuardService Seguridad S.A.","GS Tecnologías S.A.","GS Outsourcing S.A.","Inversiones Odin Ltda."  }));
+       // llenarTabla();
 //    DefaultTableModel dm = new DefaultTableModel();
 //    dm.setDataVector(new Object[][]{{"button 1","foo"},
 //                                    {"button 2","bar"}},
@@ -52,6 +57,7 @@ public class Transacciones extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,6 +75,13 @@ public class Transacciones extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Listado de Transacciones Anteriores");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,14 +91,21 @@ public class Transacciones extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
             .addGroup(layout.createSequentialGroup()
-                .addGap(261, 261, 261)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(261, 261, 261)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(26, 26, 26)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -94,6 +114,10 @@ public class Transacciones extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        System.out.println("se cambió");
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,12 +150,18 @@ public class Transacciones extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Transacciones().setVisible(true);
+                Transacciones transacciones= new Transacciones();
+                String[] titulos = {"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
+                GetData data = new GetData();
+                List<Pago> listaTrans = data.getPagosSoft(0);
+                transacciones.llenarTabla();
+                transacciones.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
@@ -141,26 +171,30 @@ public class Transacciones extends javax.swing.JFrame {
         
         System.out.println("dentro llenar tabla");
 
-        String[] titulos = {"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
-        String[] datos = new String[6];
+        
+        String[] datos = new String[titulos.length];
         DefaultTableModel tableModel = new DefaultTableModel(null, titulos);
-        List<Pago> listTrans = facturaMannager.getPagos(0);
-        for (Pago trans : listTrans) {
-            datos[0] = Integer.toString(trans.getIdPago());
-            datos[1] = Integer.toString(trans.getMarca());
-            datos[2] = trans.getMonto();
+       // List<Pago> listTrans = facturaMannager.getPagos(0);
+        
+       
+        for (Object trans : (List) lista) {
+            if (trans instanceof Pago){
+          
+            datos[0] = Integer.toString( ((Pago) trans).getIdDocumento());
+            datos[1] = Integer.toString( ((Pago) trans).getMarca());
+            datos[2] = ((Pago) trans).getMonto();
            // SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
           //  String fechatrans = dateFormat.format(trans.getFecha());
 
           //  datos[3] = fechatrans;
-          datos[3]=trans.getFecha();
-          datos[4] = Integer.toString(trans.getSoftSaldo());
+          datos[3]=((Pago) trans).getFecha();
+          datos[4] = Integer.toString(((Pago) trans).getSoftSaldo());
             //datos[5]="boton"+i;
-            datos[5] = Integer.toString(trans.getSoftCantMovim());
+            datos[5] = Integer.toString(((Pago) trans).getSoftCantMovim());
             //  System.out.println("datos"+datos[0]);
 
             tableModel.addRow(datos);
- 
+            }
            
 
         }
@@ -168,5 +202,39 @@ public class Transacciones extends javax.swing.JFrame {
       jTable1.setModel(tableModel);
 
     }
+
+    public int getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(int empresa) {
+        this.empresa = empresa;
+    }
+
+    public JComboBox<String> getjComboBox1() {
+        return jComboBox1;
+    }
+
+    public void setjComboBox1(JComboBox<String> jComboBox1) {
+        this.jComboBox1 = jComboBox1;
+    }
+
+    public String[] getTitulos() {
+        return titulos;
+    }
+
+    public void setTitulos(String[] titulos) {
+        this.titulos = titulos;
+    }
+
+    public Object getLista() {
+        return lista;
+    }
+
+    public void setLista(Object lista) {
+        this.lista = lista;
+    }
+
+    
 
 }
