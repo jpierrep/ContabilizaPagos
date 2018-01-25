@@ -116,11 +116,12 @@ public class PanelOpciones extends JFrame {
             }
 
             private void jButtonActionPerformed(ActionEvent evt) {
+                System.out.println("boton opciones");
              
-                for (int i = 0; i < 7; i++) {
-                    System.out.println(jtext[i].getText());
-
-                }
+//                for (int i = 0; i < 7; i++) {
+//                    System.out.println(jtext[i].getText());
+//
+//                }
 
             }
         });
@@ -207,6 +208,14 @@ public class PanelOpciones extends JFrame {
 
     public void setListaOpciones(List<Opciones> listaOpciones) {
         this.listaOpciones = listaOpciones;
+    }
+
+    public JButton getButton1() {
+        return button1;
+    }
+
+    public void setButton1(JButton button1) {
+        this.button1 = button1;
     }
 
    
