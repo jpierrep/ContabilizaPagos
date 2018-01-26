@@ -69,6 +69,9 @@ public class Pago {
     public String getMonto() {
         return monto;
     }
+    public int getMontoInt() {
+        return Integer.parseInt(monto);
+    }
 
     public void setMonto(String monto) {
         this.monto = monto;

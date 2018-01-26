@@ -315,9 +315,14 @@ public class GetData extends Dao {
               //Marca 1 indica que se va directo a contabilizacion
               //
               
-                if (pago.SoftCantMovim==1){
+                if(pago.SoftSaldo<0){
+                   //los negativos no los contabilizamos
+                    pago.marca=0;
+                }
+                else if  (pago.SoftCantMovim==1){
                     
                     pago.marca=1;
+                
                 }else {
    String querySoft = "select MovFe,convert(int,MovHaber) as MovHaber\n" +
 "    FROM "+getNombreEmpresa(empresa)+".[softland].[cwmovim] as mov\n" +

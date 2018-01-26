@@ -169,7 +169,7 @@ public class PanelOpciones extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
                 String text = ((JButton) e.getSource()).getName();
-                JOptionPane.showMessageDialog(null, text);
+          //      JOptionPane.showMessageDialog(null, text);
             }
         }
     };
