@@ -6,6 +6,7 @@
 package facturasporcobrar;
 
 import Dao.GetData;
+import Model.FacturaXC;
 import Model.Pago;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +22,30 @@ public class Test {
      */
     public static void main(String[] args) {
      
-        List<Pago> pagos=new ArrayList();
-        GetData getdata= new GetData();
-       pagos= getdata.getPagosSoft(0);
-        System.out.println(pagos.size());
-        System.out.println("hola");
-       for (Pago p:pagos){
-         if (p.marca==3){
-           System.out.println("igual monto distintas fechas,"+ p.numDocumento);
-         }if (p.marca==2){
-           System.out.println("igual monto igual fechas,"+ p.numDocumento);
-         }
-                 if (p.marca==4){
-        System.out.println("mas de un movimiento y contabilizar,"+ p.numDocumento+p.fecha);
-                 }
-       }
+//        List<Pago> pagos=new ArrayList();
+//        GetData getdata= new GetData();
+//       pagos= getdata.getPagosSoft(0);
+//        System.out.println(pagos.size());
+//        System.out.println("hola");
+//       for (Pago p:pagos){
+//         if (p.marca==3){
+//           System.out.println("igual monto distintas fechas,"+ p.numDocumento);
+//         }if (p.marca==2){
+//           System.out.println("igual monto igual fechas,"+ p.numDocumento);
+//         }
+//                 if (p.marca==4){
+//        System.out.println("mas de un movimiento y contabilizar,"+ p.numDocumento+p.fecha);
+//                 }
+//       }
+       List<FacturaXC> pagos=new ArrayList();
+      GetData getdata= new GetData();
+      pagos=getdata.getFacturasConSaldo(0);
        
+      for (FacturaXC fact: pagos){
+          System.out.println(fact.getMovNumDocRef());
+          
+      }
+      
         
         
     }

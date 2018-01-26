@@ -72,7 +72,6 @@ public class GetData extends Dao {
 "    group by  aux.RutAux\n" +
 "  ,aux.NomAux,movNumDocRef\n" +
 "  having  SUM(MovDebe-MovHaber)<>0\n" +
-"  and YEAR(min(mov.MovFe))=2012\n" +
 "  order by aux.NomAux asc";
                        
             
@@ -126,6 +125,119 @@ public class GetData extends Dao {
     }
          
          
+                  // procedimiento que cruza los documentos no saldados con los pagos recibidos 
+     
+         public List<FacturaXC> getFacturasConSaldo (int empresa){
+             
+        
+    
+        PreparedStatement stmt = null;
+        ResultSet rs = null; 
+         ResultSet rsSoft = null; 
+      List<FacturaXC> lista= new ArrayList();   
+    try{
+           
+   
+        this.Conectar();
+      
+                String queryString = 
+                        " use Invoicing\n" +
+"\n" +
+"declare @tabla Table(MovNumDocRef int,saldo int,cantMovim int,fecha datetime,Codaux varchar(255),rutAux varchar(255),NomAux varchar(255))\n" +
+"insert  @tabla\n" +
+"exec Inteligencias.dbo.softland_get_doctos "+empresa+"\n" +
+ "select * from @tabla";
+                        
+
+             stmt = this.con.prepareStatement(queryString);
+           
+         Statement st=con.createStatement();
+          Statement stSoft=con.createStatement();
+        
+         st.executeUpdate(queryString);
+         
+         //getGeberatedKeys devuelve lo que retorna la query en este caso que se obtuvo del SP
+         rs=st.getGeneratedKeys();
+        
+            while (rs.next()) {
+           
+                
+              FacturaXC factura=new FacturaXC(
+              rs.getString("rutAux"),
+              rs.getString("NomAux"),
+              rs.getString("Fecha"),
+              rs.getString("MovNumDocRef"),
+              rs.getString("saldo"),
+              rs.getString("cantMovim")        
+                      
+              );
+              
+              //Marca 1 indica que se va directo a contabilizacion
+              //
+              
+              
+                       
+                lista.add(factura);
+            } 
+     
+            System.out.println("biiieennntoo");
+
+            } catch (BatchUpdateException ex) {
+                
+                //captura cada batch y devuelve si se ejecuto o no cada uno
+
+            int[] updateCount = ex.getUpdateCounts();
+
+             
+
+            int count = 1;
+
+            for (int i : updateCount) {
+
+                if  (i == Statement.EXECUTE_FAILED) {
+
+                    System.out.println("Error on request " + count +": Execute failed");
+
+                } else {
+
+                    System.out.println("Request " + count +": OK");
+
+                }
+
+                count++;
+
+            }
+            
+           } catch (SQLException e) {
+            System.out.println("SQLState: "
+                    + e.getSQLState());
+            System.out.println("SQLErrorCode: "
+                    + e.getErrorCode());
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                    rs = null;
+                }
+                if (stmt != null) {
+                    stmt.close();
+                    stmt = null;
+                }
+                if (con != null) {
+                    con.close();
+                    con = null;
+                }
+            } catch (SQLException e) {
+
+            }
+        }
+
+    
+     return lista;
+    }
+         
    
          
 
@@ -147,7 +259,7 @@ public class GetData extends Dao {
                 String queryString = 
                         " use Invoicing\n" +
 "\n" +
-"declare @tabla Table(MovNumDocRef int,saldo int,cantMovim int,fecha datetime)\n" +
+"declare @tabla Table(MovNumDocRef int,saldo int,cantMovim int,fecha datetime,Codaux varchar(255),rutAux varchar(255),NomAux varchar(255))\n" +
 "insert  @tabla\n" +
 "exec Inteligencias.dbo.softland_get_doctos "+empresa+"\n" +
 "\n" +

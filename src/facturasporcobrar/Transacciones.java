@@ -7,6 +7,7 @@ package facturasporcobrar;
 
 
 import Dao.GetData;
+import Model.FacturaXC;
 import Model.Pago;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -206,6 +207,18 @@ public class Transacciones extends javax.swing.JFrame {
             datos[5] = Integer.toString(((Pago) trans).getSoftCantMovim());
             //  System.out.println("datos"+datos[0]);
 
+            tableModel.addRow(datos);
+            }
+              if (trans instanceof FacturaXC){
+          
+            datos[0] =  ((FacturaXC) trans).getMovNumDocRef();
+            datos[1] = ((FacturaXC) trans).getSaldo();
+            datos[2] = ((FacturaXC) trans).getCantMov();
+          datos[3]=((FacturaXC) trans).getMovFe();
+          datos[4] = ((FacturaXC) trans).getCodAux();
+       
+            datos[5] = ((FacturaXC) trans).getRutAux();
+            datos[6] = ((FacturaXC) trans).getNomAux();
             tableModel.addRow(datos);
             }
            

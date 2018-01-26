@@ -41,20 +41,22 @@ public class SystemMannager {
     int empresa;
     GetData data=new GetData();
     Transacciones transInicial= new Transacciones();
+    List<FacturaXC> facturasConSaldo= new ArrayList();
+     List<Pago> pagos= new ArrayList();
     Transacciones transVer= new Transacciones();
     PanelOpciones panelOpciones; //=new PanelOpciones("aa");
     
     
    public List<FacturaXC> getFacturasConSaldo(){
             
-     return  data.getResumenCuentasMes("",0);  
+     facturasConSaldo=data.getFacturasConSaldo(empresa);
+       return  facturasConSaldo; 
         
    }
-     
+   
    public List<Pago> getPagos(){
-        List<Pago> pagos=new ArrayList();
-        GetData getdata= new GetData();
-       pagos= getdata.getPagosSoft(empresa);
+        
+       pagos= data.getPagosSoft(empresa);
 
        return pagos;
       
@@ -62,7 +64,7 @@ public class SystemMannager {
    }
    
    public String[] getTitulos(String objeto){
-     String[] titulos = {"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
+     String[] titulos = {"Nº Documento", "Saldo", "Cant. Movim.", "Fecha Emisión", "Cod. Auxiliar", "Rut Auxiliar","Nombre Auxiliar"};
      
      if (objeto.equals("Pago")){  
       titulos= new  String []{"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
@@ -76,7 +78,7 @@ public class SystemMannager {
      empresa=2; 
     
       transInicial.setTitulos(getTitulos("Facturas"));
-      transInicial.setLista(getPagos());
+      transInicial.setLista(getFacturasConSaldo()); // aca se llenan las facturas
       transInicial.llenarTabla();
      // transInicial.llenarTabla(titulos, data.getPagosSoft(transInicial.empresa));
    
@@ -111,13 +113,16 @@ public class SystemMannager {
              empresa=transInicial.getjComboBox1().getSelectedIndex();
              //pasamos la data segun la empresa y llenamos la tabla
              transInicial.setTitulos(getTitulos("Facturas"));
-             transInicial.setLista(getPagos());
+             transInicial.setLista(getFacturasConSaldo());
              transInicial.llenarTabla();
      }
      
-     // Action Performed de la tabla principal 
+     // Action Performed del botón de la tabla principal 
      
      private void jButton1ActionPerformed(ActionEvent evt) {
+         //obtenemos los pagos y se llenará la variable pagos
+         getPagos();
+         
          List<Opciones> listaOpciones=generaOpciones("PreContabiliza");
          panelOpciones=new PanelOpciones("PreContabiliza", listaOpciones);
          
@@ -138,6 +143,7 @@ public class SystemMannager {
         });
         
         panelOpciones.setVisible(true);
+        panelOpciones.setAlwaysOnTop(true);
          
     
          
@@ -254,13 +260,13 @@ listamov= ((List<Pago>)transInicial.getLista()).stream().filter(
                    //2 registros no contabilizados
                    switch (idBoton){
                        case "1":
-   cantContab = ((List<Pago>)transInicial.getLista()).stream().filter(
+   cantContab = pagos.stream().filter(
    a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)).collect(Collectors.toList()); 
            llenaTablaVista(cantContab,"Listado Pagos a Contabilizar");
                break;
                        case "2":
                            
-      cantContab = ((List<Pago>)transInicial.getLista()).stream().filter(
+      cantContab = pagos.stream().filter(
    a -> Objects.equals(a.getMarca(),3)).collect(Collectors.toList()); 
                            llenaTablaVista(cantContab,"Listado Pagos no posibles de contabilizar");
                break;
@@ -282,9 +288,9 @@ listamov= ((List<Pago>)transInicial.getLista()).stream().filter(
        List<Opciones> lista=new ArrayList();
        if (proceso.equals("PreContabiliza")){
       
-           long  cantTotal = ((List<Pago>)transInicial.getLista()).stream().filter(
+           long  cantTotal = pagos.stream().filter(
    a -> Objects.equals(a.getMarca(), 1)||Objects.equals(a.getMarca(), 3)||Objects.equals(a.getMarca(), 4)).count();
-    long  cantContab = ((List<Pago>)transInicial.getLista()).stream().filter(
+    long  cantContab = pagos.stream().filter(
    a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)).count();
     long cantNoContab=cantTotal-cantContab;
       Opciones op1=new Opciones("Total Pagos: ",cantTotal+"",false);
