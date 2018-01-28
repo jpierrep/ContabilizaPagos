@@ -8,7 +8,6 @@ package Dao;
 
 import Model.FacturaXC;
 import Model.Pago;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.sql.BatchUpdateException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -21,6 +20,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
 /**
  *
@@ -127,7 +127,7 @@ public class GetData extends Dao {
          
                   // procedimiento que cruza los documentos no saldados con los pagos recibidos 
      
-         public List<FacturaXC> getFacturasConSaldo (int empresa){
+         public List<FacturaXC> getFacturasConSaldo2 (int empresa){
              
         
     
@@ -238,12 +238,23 @@ public class GetData extends Dao {
      return lista;
     }
          
-   
+         public List<FacturaXC> getFacturasConSaldo (int empresa){
+             List<FacturaXC> lista = new ArrayList<>();
+             
+             FacturaXC fact1= new FacturaXC("1001-1", "Juan", "2017-01-01","11", "1000","2");
+              FacturaXC fact2= new FacturaXC("1001-1", "Juan", "2017-01-02","22", "2000","1");
+              lista.add(fact1);
+              lista.add(fact2);
+             
+             
+             return lista;
+         }
+                 
          
 
          // procedimiento que cruza los documentos no saldados con los pagos recibidos 
      
-         public List<Pago> getPagosSoft(int empresa){
+         public List<Pago> getPagosSoft2(int empresa){
              
         
     
@@ -432,6 +443,23 @@ public class GetData extends Dao {
     
      return lista;
     }
+        
+         public List<Pago> getPagosSoft(int empresa){
+             List<Pago> lista = new ArrayList<>();
+             Pago p1= new Pago(998,11,888,"500","2017-02-01",2,1000,"2017-01-01");
+             p1.marca=1;
+             Pago p2= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
+             p2.marca=4;
+             Pago p4= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
+             Pago p3= new Pago(997,22,777,"3000","2017-02-01",3,2000,"2017-01-02");
+             lista.add(p1);
+             lista.add(p2);
+             lista.add(p4);
+             lista.add(p3);
+             
+             return lista;
+             
+         }
      
         public String getNombreEmpresa(int empresa){
             String nombreEmpresa="";

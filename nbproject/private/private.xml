@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/Test.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/FacturasPorCobrar.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/Model/FacturaXC.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/PanelOpciones.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/Model/Opciones.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/Dao/GetData.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/Dao/Dao.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/SystemMannager.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/Lista.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/Model/Pago.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/FacturasPorCobrar/src/facturasporcobrar/Transacciones.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

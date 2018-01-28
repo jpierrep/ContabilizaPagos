@@ -123,6 +123,8 @@ public class SystemMannager {
      private void jButton1ActionPerformed(ActionEvent evt) {
          //obtenemos los pagos y se llenará la variable pagos
          getPagos();
+    //aca analizamos los pagos y añadimos las demás marcas
+         calculaMarcasSubtotales();
          
          List<Opciones> listaOpciones=generaOpciones("PreContabiliza");
          panelOpciones=new PanelOpciones("PreContabiliza", listaOpciones);
@@ -202,7 +204,7 @@ listamov= pagos.stream().filter(
              
               for (String area:listaArea){
                   System.out.println(""); 
-                  exportarMovimientos(listamov,filepath,Integer.toString(empresa)+"-"+area);
+                  exportarMovimientos(getPagosContab(),filepath,Integer.toString(empresa)+"-"+area);
                            
             
              
@@ -240,38 +242,33 @@ listamov= pagos.stream().filter(
                 String text = ((JButton) e.getSource()).getName();
                 System.out.println("hola"+ text);
                // si presionan un boton ver mostramos la tabla que corresponda según el id del boton y el proceso
-                muestraTabla(text);
+                muestraTablaProceso(text);
                             
             }
         }
     };
       
           // seguun el nombre del proceso y el id del botón se muestra la tabla correspondiente
-          public void  muestraTabla(String id){
+          public void  muestraTablaProceso(String id){
               String[] newId=id.split(" ");
               String idBoton=newId[0];      
               String proceso=newId[1];           
                         
               
               if(proceso.equals("PreContabiliza")){
-                 List<Pago> cantContab;
+                 
                   //las opciones  de idBoton son:
                    //0 total pagos // no trae el boton activado
                    //1 registros contabilizados
                    //2 registros no contabilizados
                    switch (idBoton){
                        case "1":
-                           //aca analizamos los pagos y añadimos las demás marcas
-                        calculaContab();
-   cantContab = pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8)).collect(Collectors.toList()); 
-           llenaTablaVista(cantContab,"Listado Pagos a Contabilizar");
+ 
+           llenaTablaVista(getPagosContab(),"Listado Pagos a Contabilizar");
                break;
                        case "2":
                            
-      cantContab = pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),0)).collect(Collectors.toList()); 
-                           llenaTablaVista(cantContab,"Listado Pagos no posibles de contabilizar");
+    llenaTablaVista(getPagosSinContab(),"Listado Pagos no posibles de contabilizar");
                break;
                         
                        
@@ -287,14 +284,13 @@ listamov= pagos.stream().filter(
           
           public List<Opciones> generaOpciones(String proceso){
 
-       List<Opciones> lista=new ArrayList();
+
+              List<Opciones> lista=new ArrayList();
        if (proceso.equals("PreContabiliza")){
       
-           long  cantTotal = pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(), 1)||Objects.equals(a.getMarca(), 3)||Objects.equals(a.getMarca(), 4)).count();
-    long  cantContab = pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)).count();
-    long cantNoContab=cantTotal-cantContab;
+           long  cantTotal = getPagosContab().stream().count()+getPagosSinContab().stream().count();
+           long  cantContab = getPagosContab().stream().count();
+           long cantNoContab=cantTotal-cantContab;
       Opciones op1=new Opciones("Total Pagos: ",cantTotal+"",false);
       Opciones op2=new Opciones("Cantidad Contabilizar:",cantContab+"",true);
       Opciones op3=new Opciones("Cantidad No Contabilizar:",cantNoContab+"",true);
@@ -318,7 +314,8 @@ listamov= pagos.stream().filter(
               
           }
           
-              public  void calculaContab(){
+              
+               public  void calculaMarcasSubtotales(){
                   
                   //agrupamos por documento AÑADIR SOLO LOS DOCUMENTOS A CONTABILIZAR SEGUN LA MARCA 1 Y 4 y ORDENADOS POR FECHA
                   //agrupamos los  montos de pagos para validar si es posible contabilizar segun la suma
@@ -329,6 +326,9 @@ listamov= pagos.stream().filter(
                    System.out.println(sum);
               //por cada tipo de documento se tiene la suma de los pagos, validar si corresponde contabilizar segun el saldo de cada uno
               sum.forEach((doc,suma)->{
+ 
+                  
+           
                   //obtenemos todos los pagos por documento para validar cual de ellos contabilizar y cuales no
                  List<Pago> p= pagos.stream().filter(  a -> Objects.equals(a.getNumDocumento(),doc)).collect(Collectors.toList());
                   
@@ -340,26 +340,31 @@ listamov= pagos.stream().filter(
                  //marca 9  aquellos en que el acumulador este fuera de rango no se contabiliza
                 
                  int acumuladorSaldo=0;
+                  
                  for (Pago pag:p){
-   //          si el saldo del documento es menor o igual a la suma de la agrupacion entonces se contabiliza
-                     if(pag.getSoftSaldo()<=suma){
+   acumuladorSaldo=acumuladorSaldo+pag.getMontoInt(); 
+   //          si el saldo del documento es mayor o igual a la suma de la agrupacion entonces se contabiliza
+                     if(pag.getSoftSaldo()>=suma){
                          pag.setMarca(7);
                         //  nuevoPago.add(pag);
-                     
-//     //   LOS NEGATIVOS SE MANEJARAN AL PRINCIPIO                     
-//     else   if(pag.getSoftSaldo()<0){
-//                         pag.setMarca(10);
-//                         nuevoPago.add(pag);
+                         System.out.println("marca 7");
+                      System.out.println("doc: "+doc+" saldo:"+pag.getSoftSaldo()+" acum:"+acumuladorSaldo+" suma:"+suma);
                          //si el pago esta detro del acumulador de saldo
-                     }else if(pag.getSoftSaldo()<=acumuladorSaldo){
+                     }else if(pag.getSoftSaldo()>=acumuladorSaldo){
                          pag.setMarca(8);
                          //aumentamos el acumulador segun el monto del pago
-                         acumuladorSaldo=acumuladorSaldo+pag.getMontoInt();                         
-                       //  nuevoPago.add(pag);
-                     }else{
+                       //  acumuladorSaldo=acumuladorSaldo+pag.getMontoInt();   
+                              System.out.println("marca 8");
+                                        System.out.println("doc: "+doc+" saldo:"+pag.getSoftSaldo()+" acum:"+acumuladorSaldo+" suma:"+suma);
+
+                        // nuevoPago.add(pag);
+                     }else if (pag.getSoftSaldo()<acumuladorSaldo){
                          //si no el pago no es posible de contabilizar porque no alcanza a estar dentro del monto
+        System.out.println("doc: "+doc+" saldo:"+pag.getSoftSaldo()+" acum:"+acumuladorSaldo+" suma:"+suma);
+                         System.out.println(" marca 9");
                          pag.setMarca(9);
                         // nuevoPago.add(pag);
+                  //   acumuladorSaldo=acumuladorSaldo+pag.getMontoInt();  
                      }
                      
                  }
@@ -368,33 +373,15 @@ listamov= pagos.stream().filter(
               
               );
                   System.out.println("dentro de marcas");  
-//          for(Pago p:nuevoPago){
-//                System.out.println("marcas"+p.marca);
-//            }
 
-            //  pagos=nuevoPago;
-//              List<Pago> listamov= new ArrayList(); 
-//listamov= pagos.stream().filter(
-//   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)).collect(Collectors.toList()); 
-
-  //acá ya tengo todos los que se puedan contabilizar
-//   Map<String, Integer> sum = pagos.stream().collect(
-//                Collectors.groupingBy(Pago::getSoftCantMovim, Collectors.summingInt(Integer.parseInt(Pago::getMonto))));
-//              System.out.println(sum);
-
-//Map<String, Integer> sum = pagos.stream().collect(
-//                Collectors.groupingBy(Pago::getNumDocumento, Collectors.summingInt(Integer.parseInt(Pago::getMonto))));
-//              System.out.println(sum);
 
              
           }
           
           
-            public  void exportarMovimientos(List<Pago> lista,String path,String nombreArchivo) throws IOException, FileNotFoundException, ClassNotFoundException{
+  public  void exportarMovimientos(List<Pago> lista,String path,String nombreArchivo) throws IOException, FileNotFoundException, ClassNotFoundException{
       
-        
 
-        
  java.util.Date utilDate = new java.util.Date();
  DateFormat df = new SimpleDateFormat("dd-MM-YYYY");
  String fecha=df.format(utilDate);
@@ -467,16 +454,22 @@ listamov= pagos.stream().filter(
               e2.printStackTrace();
            }
         }
-        
-        
-    
-        
-        
-        
+ 
         
     }
             
-          
+        public List<Pago> getPagosContab(){
+        
+         return pagos.stream().filter(
+   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8)).collect(Collectors.toList()); 
+    } 
+                public List<Pago> getPagosSinContab(){
+        
+         return pagos.stream().filter(
+   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),2)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)).collect(Collectors.toList()); 
+    }
+            
+            
    public static void main(String args[]) {
   
      SystemMannager sys= new SystemMannager();
