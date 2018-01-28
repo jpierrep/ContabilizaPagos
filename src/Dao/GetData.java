@@ -243,8 +243,10 @@ public class GetData extends Dao {
              
              FacturaXC fact1= new FacturaXC("1001-1", "Juan", "2017-01-01","11", "1000","2");
               FacturaXC fact2= new FacturaXC("1001-1", "Juan", "2017-01-02","22", "2000","1");
+              FacturaXC fact3= new FacturaXC("1001-1", "Juan", "2017-01-02","33", "-12000","1");
               lista.add(fact1);
               lista.add(fact2);
+              lista.add(fact3);
              
              
              return lista;
@@ -451,11 +453,16 @@ public class GetData extends Dao {
              Pago p2= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
              p2.marca=4;
              Pago p4= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
+             p4.setMarca(1);
              Pago p3= new Pago(997,22,777,"3000","2017-02-01",3,2000,"2017-01-02");
+             p3.setMarca(1);
+             Pago p5= new Pago(997,33,777,"3000","2017-02-01",3,-12000,"2017-01-02");
+             p5.marca=0;
              lista.add(p1);
              lista.add(p2);
              lista.add(p4);
              lista.add(p3);
+             lista.add(p5);
              
              return lista;
              

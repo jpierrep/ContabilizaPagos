@@ -68,7 +68,7 @@ public class SystemMannager {
      String[] titulos = {"Nº Documento", "Saldo", "Cant. Movim.", "Fecha Emisión", "Cod. Auxiliar", "Rut Auxiliar","Nombre Auxiliar"};
      
      if (objeto.equals("Pago")){  
-      titulos= new  String []{"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
+      titulos= new  String []{"Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Marca Id","Marca Desc"};
      }
       return titulos;
    }
@@ -193,13 +193,7 @@ public class SystemMannager {
           filepath=filepath+"\\"+transInicial.getjComboBox1().getSelectedItem().toString();
           
        
-          
-          
-          List<Pago> listamov= new ArrayList(); 
-listamov= pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)).collect(Collectors.toList()); 
-  
-     //   listamov=getdata.getResumenCuentasMes("20170101",0);
+       
           try {
              
               for (String area:listaArea){
@@ -320,7 +314,7 @@ listamov= pagos.stream().filter(
                   //agrupamos por documento AÑADIR SOLO LOS DOCUMENTOS A CONTABILIZAR SEGUN LA MARCA 1 Y 4 y ORDENADOS POR FECHA
                   //agrupamos los  montos de pagos para validar si es posible contabilizar segun la suma
                   List<Pago> nuevoPago=new ArrayList<>();
-                   Map<Integer, Integer> sum = pagos.stream().collect(
+                   Map<Integer, Integer> sum = getPagosContab().stream().collect(
                 Collectors.groupingBy(Pago::getNumDocumento, Collectors.summingInt(Pago::getMontoInt)));
             
                    System.out.println(sum);
@@ -330,7 +324,7 @@ listamov= pagos.stream().filter(
                   
            
                   //obtenemos todos los pagos por documento para validar cual de ellos contabilizar y cuales no
-                 List<Pago> p= pagos.stream().filter(  a -> Objects.equals(a.getNumDocumento(),doc)).collect(Collectors.toList());
+                 List<Pago> p= getPagosContab().stream().filter(  a -> Objects.equals(a.getNumDocumento(),doc)).collect(Collectors.toList());
                   
                  //añadimos un acumulador de pagos para validar que de la lista no se pase, si se pasa el monto del pago
                  //del valor del saldo del documento el pago no será posible contabilizarlo, si el saldo es se marcará también
@@ -469,7 +463,9 @@ listamov= pagos.stream().filter(
    a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),2)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)).collect(Collectors.toList()); 
     }
             
-            
+     
+                
+                
    public static void main(String args[]) {
   
      SystemMannager sys= new SystemMannager();

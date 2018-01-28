@@ -195,18 +195,26 @@ public class Transacciones extends javax.swing.JFrame {
             if (trans instanceof Pago){
           
             datos[0] = Integer.toString( ((Pago) trans).getIdDocumento());
-            datos[1] = Integer.toString( ((Pago) trans).getMarca());
-            datos[2] = ((Pago) trans).getMonto();
-           // SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            datos[1]= Integer.toString(((Pago) trans).getNumDocumento()); 
+            datos[2] = Integer.toString(((Pago) trans).getSoftCantMovim());
+            datos[3] = Integer.toString(((Pago) trans).getSoftSaldo());  
+            datos[4]=((Pago) trans).getSoftMinFecha();
+            
+            datos[5]=((Pago) trans).getFecha();
+            datos[6] = ((Pago) trans).getMonto();
+                     
+// SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
           //  String fechatrans = dateFormat.format(trans.getFecha());
 
           //  datos[3] = fechatrans;
-          datos[3]=((Pago) trans).getFecha();
-          datos[4] = Integer.toString(((Pago) trans).getSoftSaldo());
+         
+        
             //datos[5]="boton"+i;
-            datos[5] = Integer.toString(((Pago) trans).getSoftCantMovim());
+            
+            
             //  System.out.println("datos"+datos[0]);
-
+datos[7] = Integer.toString( ((Pago) trans).getMarca());
+datos[8] = ((Pago) trans).getMarcaDesc();
             tableModel.addRow(datos);
             }
               if (trans instanceof FacturaXC){

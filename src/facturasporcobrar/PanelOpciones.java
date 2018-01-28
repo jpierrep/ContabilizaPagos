@@ -37,7 +37,7 @@ public class PanelOpciones extends JFrame {
     List<Opciones> listaOpciones=new ArrayList<>();
 
     
-    JButton button1 = new JButton("Mapear Variables");
+    JButton button1 = new JButton("Generar Archivos");
     JLabel[] jlabels;
     JTextField[] jtext;
     JButton[] jbuttons;
@@ -48,7 +48,7 @@ public class PanelOpciones extends JFrame {
     public PanelOpciones(String Proceso,List<Opciones> lista ) {
         
        
-        super("JPanel Demo Program");
+      // Nombre  super("JPanel Demo Program");
 
              this.listaOpciones=lista;
          cantidadColumnas=listaOpciones.size();
@@ -91,7 +91,9 @@ public class PanelOpciones extends JFrame {
             jbuttons[i].addActionListener(listener);
             jbuttons[i].setName(i+" "+Proceso);
             if(!listaOpciones.get(i).isHasButton()){
-              jbuttons[i].setEnabled(false);
+              jbuttons[i].setVisible(false);
+            }else if(Integer.parseInt(listaOpciones.get(i).getValor())==0){
+              jbuttons[i].setEnabled(false);  
             }
             constraints.gridx = 0;
             ++constraints.gridy;
@@ -128,7 +130,7 @@ public class PanelOpciones extends JFrame {
 
         // set border for the panel
         newPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), "Login Panel"));
+                BorderFactory.createEtchedBorder(), "Resumen Proceso"));
 
         // add the panel to this frame
         add(newPanel);

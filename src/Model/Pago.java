@@ -110,7 +110,32 @@ public class Pago {
     }
    
    
-   
+   public String getMarcaDesc(){
+                    String marcaDesc="";
+                    switch (marca){
+                        case 0: marcaDesc="Saldo Negativo";
+                           break;
+                        case 1: marcaDesc="Factura Sin Mov.";
+                           break;  
+                             case 2: marcaDesc="Pago Existente";
+                           break;
+                        case 3: marcaDesc="Monto Existente";
+                           break;  
+                             case 4: marcaDesc="Factura con Mov./No reg. Pago";
+                           break;
+                        case 7: marcaDesc="Contab/Pagos menor que Saldo";
+                           break;  
+                        case 8: marcaDesc="Contab/Pago dentro de Saldo";
+                           break;   
+                        case 9: marcaDesc="Contab/Pago fuera de Saldo";
+                           break;       
+                                
+                        
+                    }
+                    
+                    return marcaDesc;
+                    
+                }
     
     
 }
