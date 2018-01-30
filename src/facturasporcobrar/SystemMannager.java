@@ -346,14 +346,19 @@ public class SystemMannager {
    }
           
           public void llenaTablaVista(List<Pago> lista,String tituloTabla){
-                             transVer.setVisible(false);
+             
+               
+               transVer.setVisible(false);
                transVer.getjComboBox1().setVisible(false);
                transVer.getjButton1().setVisible(false);
                transVer.getjLabel1().setText(tituloTabla);
-                transVer.setTitulos(getTitulos("Pago"));
-             transVer.setLista(lista);
-             transVer.llenarTabla(); 
-             transVer.setVisible(true);
+               transVer.setTitulos(getTitulos("Pago"));
+               transVer.setLista(lista);
+               //llenamos con el total
+               transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoInt()).sum())));
+               transVer.getjLabel2().setVisible(true);
+               transVer.llenarTabla(); 
+               transVer.setVisible(true);
               
           }
           
@@ -364,11 +369,11 @@ public class SystemMannager {
                   //agrupamos los  montos de pagos para validar si es posible contabilizar segun la suma
                   List<Pago> nuevoPago=new ArrayList<>();
                    Map<Integer, Integer> sum = getPagosContab().stream().collect(
-                Collectors.groupingBy(Pago::getNumDocumento, Collectors.summingInt(Pago::getMontoInt)));
+                   Collectors.groupingBy(Pago::getNumDocumento, Collectors.summingInt(Pago::getMontoInt)));
             
                    System.out.println(sum);
-              //por cada tipo de documento se tiene la suma de los pagos, validar si corresponde contabilizar segun el saldo de cada uno
-              sum.forEach((doc,suma)->{
+                  //por cada tipo de documento se tiene la suma de los pagos, validar si corresponde contabilizar segun el saldo de cada uno
+                   sum.forEach((doc,suma)->{
  
                   
            
@@ -385,10 +390,14 @@ public class SystemMannager {
                  int acumuladorSaldo=0;
                   
                  for (Pago pag:p){
-   acumuladorSaldo=acumuladorSaldo+pag.getMontoInt(); 
-   //          si el saldo del documento es mayor o igual a la suma de la agrupacion entonces se contabiliza
-                     if(pag.getSoftSaldo()>=suma){
-                         pag.setMarca(7);
+                    acumuladorSaldo=acumuladorSaldo+pag.getMontoInt(); 
+                //Saldo negativo no se contabiliza
+                     if (pag.getSoftSaldo()<0){
+                      pag.setMarca(0);
+                      //          si el saldo del documento es mayor o igual a la suma de la agrupacion entonces se contabiliza
+                     } else if (pag.getSoftSaldo()>=suma){
+                        
+                             pag.setMarca(7);
                         //  nuevoPago.add(pag);
                      //    System.out.println("marca 7");
                      // System.out.println("doc: "+doc+" saldo:"+pag.getSoftSaldo()+" acum:"+acumuladorSaldo+" suma:"+suma);
