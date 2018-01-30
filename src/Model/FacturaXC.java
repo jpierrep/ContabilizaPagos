@@ -27,6 +27,10 @@ public class FacturaXC {
     String movGlosa; //Glosa
     String saldo; //Saldo Factura
     String cantMov; //cantidad de movimientos de la factura
+    String areaCod;
+
+    public FacturaXC() {
+    }
 
     public FacturaXC(String rutAux, String nomAux,String codAux, String movFe, String movNumDocRef, String saldo, String cantMov) {
         this.rutAux = rutAux;
@@ -185,4 +189,13 @@ public class FacturaXC {
         return Integer.parseInt(movNumDocRef);
     }
 
+    public String getAreaCod() {
+        return areaCod;
+    }
+
+    public void setAreaCod(String areaCod) {
+        this.areaCod = areaCod;
+    }
+
+        
 }

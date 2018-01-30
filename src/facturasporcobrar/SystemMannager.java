@@ -114,10 +114,10 @@ public class SystemMannager {
     transInicial.getjProgressBar1().setVisible(false);
       transInicial.setTitulos(getTitulos("Facturas"));
       transInicial.setLista(getFacturasConSaldo()); // aca se llenan las facturas
-      
+   
       transInicial.llenarTabla();
      // transInicial.llenarTabla(titulos, data.getPagosSoft(transInicial.empresa));
-   
+
      transInicial.getjComboBox1().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
@@ -201,11 +201,7 @@ public class SystemMannager {
        
           System.out.println("dentro panel system");
         
-        List<String> listaArea= new ArrayList(); 
-       listaArea.add("002");
-       listaArea.add("003");
-       listaArea.add("012");
-       listaArea.add("014");
+        List<String> listaArea= getDistinctAreas();
      
         
         //se deben generar los archivos solo de las areas cuadradas
@@ -238,10 +234,16 @@ public class SystemMannager {
           try {
              
               for (String area:listaArea){
-                  System.out.println(""); 
-                  exportarMovimientos(getFacPago(),filepath,Integer.toString(empresa)+"-"+area);
-                           
-            
+                 List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getFactura().getAreaCod(),area)).collect(Collectors.toList());
+                  
+                 // exportarMovimientos(getFacPago(),filepath,Integer.toString(empresa)+"-"+area);
+               String nombreArchivo = Integer.toString(empresa)+"-"+area;
+               if (area==null)
+                   nombreArchivo = Integer.toString(empresa)+"-SinArea"; 
+                     
+                 if (!p.isEmpty())
+                 exportarMovimientos(p,filepath,nombreArchivo) ;        
+                 
              
               } //fin for
               
@@ -476,7 +478,7 @@ public class SystemMannager {
                    
  
          
-             pw.println("10-01-065,0,"+termino.getPago().getMonto()+","+termino.getFactura().getNomAuxSinComas()+" [PAGO "+termino.getPago().getIdPago()+" DOCTO "+termino.getPago().getIdDocumento()+"],,,,,,,,,,,,,,,"+termino.getFactura().getCodAux()+",DP,62,"+termino.getPago().getFechaFormat()+ ","+termino.getPago().getFechaFormat()+",FV,"+termino.getPago().getNumDocumento()+" ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");  
+             pw.println("10-01-065,0,"+termino.getPago().getMonto()+","+termino.getFactura().getNomAuxSinComas()+" [P "+termino.getPago().getIdPago()+" D "+termino.getPago().getIdDocumento()+"],,,,,,,,,,,,,,,"+termino.getFactura().getCodAux()+",DP,62,"+termino.getPago().getFechaFormat()+ ","+termino.getPago().getFechaFormat()+",FV,"+termino.getPago().getNumDocumento()+" ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");  
               pw.println(cuentaBanco+","+termino.getPago().getMonto()+",0,"+termino.getFactura().getNomAuxSinComas()+",,,,,,,,,,,,,,,,DP,62,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"); 
                              
             }
@@ -511,9 +513,16 @@ public class SystemMannager {
                 public List<Pago> getPagosSinContab(){
         
          return pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),2)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)).collect(Collectors.toList()); 
+                 
+                 // el pago con marca 2 no se contabiliza pues ya existe (esta contabilizado, pero no es necesario mostrar)
+   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)).collect(Collectors.toList()); 
     }
-            
+      
+                        public List<String> getDistinctAreas(){
+        
+         return facturasConSaldo.stream().map(x -> x.getAreaCod()).distinct().collect(Collectors.toList());
+    } 
+                
        public List<FacPago> getFacPago(){
           Map<Integer, FacturaXC> ownersById = facturasConSaldo.stream()
    .collect(Collectors.toMap(k -> k.getDocInt(), k -> k)); 

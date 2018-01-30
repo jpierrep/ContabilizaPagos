@@ -160,6 +160,10 @@ public class GetData extends Dao {
          //getGeberatedKeys devuelve lo que retorna la query en este caso que se obtuvo del SP
          rs=st.getGeneratedKeys();
         
+         
+         List<FacturaXC> listaAreaNegocio=getAreaFacturas(empresa);
+         
+    
             while (rs.next()) {
            
                 
@@ -170,12 +174,23 @@ public class GetData extends Dao {
               rs.getString("Fecha"),
               rs.getString("MovNumDocRef"),
               rs.getString("saldo"),
-              rs.getString("cantMovim")        
+              rs.getString("cantMovim")  
                       
+                 
               );
-              
-              //Marca 1 indica que se va directo a contabilizacion
-              //
+                System.out.println(rs.getString("MovNumDocRef"));
+              for (FacturaXC factArea:listaAreaNegocio)    {
+                  if (factArea.getMovNumDocRef().equals(factura.getMovNumDocRef())){
+                                    
+                      factura.setAreaCod(factArea.getAreaCod());
+                       
+                      break;
+                  }
+                  
+                  
+                  
+              }  
+                
               
               
                        
@@ -469,6 +484,121 @@ public class GetData extends Dao {
              return lista;
              
          }
+         
+         
+           public List<FacturaXC> getAreaFacturas(int empresa){
+             
+        
+    
+        PreparedStatement stmt = null;
+        ResultSet rs = null; 
+         ResultSet rsSoft = null; 
+      List<FacturaXC> lista= new ArrayList();   
+    try{
+           
+   
+        this.Conectar();
+      
+                String queryString = 
+                        " use Invoicing\n" +
+"declare @tabla Table(MovNumDocRef int,saldo int,cantMovim int,fecha datetime,Codaux varchar(255),rutAux varchar(255),NomAux varchar(255)) \n" +
+" insert  @tabla \n" +
+" exec Inteligencias.dbo.softland_get_doctos "+empresa+"\n" +
+"        \n" +
+"     select  MovFe,convert(int,mov.MovNumDocRef) as MovNumDocRef,mov.AreaCod\n" +
+"\n" +
+"     FROM "+getNombreEmpresa(empresa)+".[softland].[cwmovim] as mov   \n" +
+"     left join "+getNombreEmpresa(empresa)+".[softland].[cwtauxi] as aux on mov.CodAux=AUX.CodAux   \n" +
+"  left join "+getNombreEmpresa(empresa)+".softland.cwcpbte as comp on comp.CpbNum=mov.CpbNum and comp.CpbAno=mov.CpbAno and comp.CpbMes=mov.CpbMes \n" +
+"  inner join @tabla as tabla on mov.MovNumDocRef=tabla.MovNumDocRef  -- la fecha no sirve para cruzar los documentos solo el numero\n" +
+"       where  mov.CpbMes!=  '00'   and   comp.CpbEst=  'V'   and   PctCod=  '10-01-065'  and MovDebe>0 --and MovNumDocRef=201856\n" +
+"       and TtdCod='FV'  -- Solo facturas de venta ";
+                        
+
+             stmt = this.con.prepareStatement(queryString);
+           
+         Statement st=con.createStatement();
+          Statement stSoft=con.createStatement();
+        
+         st.executeUpdate(queryString);
+         
+         //getGeberatedKeys devuelve lo que retorna la query en este caso que se obtuvo del SP
+         rs=st.getGeneratedKeys();
+        
+          String fecha;
+          String Numdoc;
+          String AreaCod;
+          FacturaXC fact;
+         
+            while (rs.next()) {
+           fact=new FacturaXC();
+           fact.setMovFe(rs.getString("MovFe"));
+           fact.setMovNumDocRef(rs.getString("MovNumDocRef"));
+           fact.setAreaCod(rs.getString("AreaCod"));
+             
+                lista.add(fact);
+            } 
+     
+            System.out.println("biiieennntoo");
+
+            } catch (BatchUpdateException ex) {
+                
+                //captura cada batch y devuelve si se ejecuto o no cada uno
+
+            int[] updateCount = ex.getUpdateCounts();
+
+             
+
+            int count = 1;
+
+            for (int i : updateCount) {
+
+                if  (i == Statement.EXECUTE_FAILED) {
+
+                    System.out.println("Error on request " + count +": Execute failed");
+
+                } else {
+
+                    System.out.println("Request " + count +": OK");
+
+                }
+
+                count++;
+
+            }
+            
+           } catch (SQLException e) {
+            System.out.println("SQLState: "
+                    + e.getSQLState());
+            System.out.println("SQLErrorCode: "
+                    + e.getErrorCode());
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                    rs = null;
+                }
+                if (stmt != null) {
+                    stmt.close();
+                    stmt = null;
+                }
+                if (con != null) {
+                    con.close();
+                    con = null;
+                }
+            } catch (SQLException e) {
+
+            }
+        }
+ 
+//       for (FacturaXC fact: lista) {
+//           System.out.println("lista"+fact.getAreaCod());
+//       }
+    
+     return lista;
+    }
      
         public String getNombreEmpresa(int empresa){
             String nombreEmpresa="";
@@ -477,6 +607,8 @@ public class GetData extends Dao {
                      return "Tecnologiassa";
                  case 2:
                      return "Outsourcingsa";
+                     case 3:
+                     return "OdinLtda";
                  case 0:
                      return "Guard";
                  default:

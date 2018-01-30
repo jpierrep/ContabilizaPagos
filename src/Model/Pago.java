@@ -24,6 +24,7 @@ public class Pago {
    public int  SoftSaldo;
    public String SoftMinFecha;
    public int marca;
+   
 
     public Pago() {
     }
