@@ -99,7 +99,7 @@ public class GetData extends Dao {
 //
 //       
 //     
-//            System.out.println("biiieennntoo");
+
 //
 //         } catch (SQLException e) {
 //           
@@ -178,7 +178,7 @@ public class GetData extends Dao {
                       
                  
               );
-                System.out.println(rs.getString("MovNumDocRef"));
+                
               for (FacturaXC factArea:listaAreaNegocio)    {
                   if (factArea.getMovNumDocRef().equals(factura.getMovNumDocRef())){
                                     
@@ -197,7 +197,7 @@ public class GetData extends Dao {
                 lista.add(factura);
             } 
      
-            System.out.println("biiieennntoo");
+            
 
             } catch (BatchUpdateException ex) {
                 
@@ -405,7 +405,7 @@ public class GetData extends Dao {
                 lista.add(pago);
             } 
      
-            System.out.println("biiieennntoo");
+            
 
             } catch (BatchUpdateException ex) {
                 
@@ -539,7 +539,7 @@ public class GetData extends Dao {
                 lista.add(fact);
             } 
      
-            System.out.println("biiieennntoo");
+          
 
             } catch (BatchUpdateException ex) {
                 
@@ -613,6 +613,7 @@ public class GetData extends Dao {
                      return "Guard";
                  default:
                      break;
+                     
              }
             return nombreEmpresa;
         } 

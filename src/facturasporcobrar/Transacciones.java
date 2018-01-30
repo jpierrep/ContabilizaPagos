@@ -38,6 +38,7 @@ public class Transacciones extends javax.swing.JFrame {
         initComponents();
      jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GuardService Seguridad S.A.","GS Tecnologías S.A.","GS Outsourcing S.A.","Inversiones Odin Ltda."  }));
      jProgressBar1.setVisible(false);
+     jTable1.setAutoCreateRowSorter(true);
      // llenarTabla();
 //    DefaultTableModel dm = new DefaultTableModel();
 //    dm.setDataVector(new Object[][]{{"button 1","foo"},
@@ -194,8 +195,54 @@ public class Transacciones extends javax.swing.JFrame {
 
         
         String[] datos = new String[titulos.length];
-        DefaultTableModel tableModel = new DefaultTableModel(null, titulos);
-       // List<Pago> listTrans = facturaMannager.getPagos(0);
+         DefaultTableModel tableModel=new DefaultTableModel(null, titulos) ;
+        
+        for (Object trans : (List) lista) {
+            if (trans instanceof Pago){
+              tableModel = new DefaultTableModel(null, titulos){   
+            @Override
+            public Class getColumnClass(int column) {
+                 switch (column) {
+                    case 0:
+                        return Integer.class;
+                    case 1:
+                        return Integer.class;
+                    case 2:
+                        return Integer.class;
+                        case 3:
+                        return Integer.class;
+                        case 6:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
+          };
+                System.out.println("es pago");
+              break;
+             }
+            
+              if (trans instanceof FacturaXC){
+              tableModel = new DefaultTableModel(null, titulos){   
+            @Override
+            public Class getColumnClass(int column) {
+                 switch (column) {
+                    case 0:
+                        return Integer.class;
+                    case 1:
+                        return Integer.class;
+                    case 2:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
+          };
+                  System.out.println(" es factura");
+              break;
+             }
+                     }
+   
         
        
         for (Object trans : (List) lista) {
@@ -209,17 +256,7 @@ public class Transacciones extends javax.swing.JFrame {
             
             datos[5]=((Pago) trans).getFecha();
             datos[6] = ((Pago) trans).getMonto();
-                     
-// SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-          //  String fechatrans = dateFormat.format(trans.getFecha());
 
-          //  datos[3] = fechatrans;
-         
-        
-            //datos[5]="boton"+i;
-            
-            
-            //  System.out.println("datos"+datos[0]);
 datos[7] = Integer.toString( ((Pago) trans).getMarca());
 datos[8] = ((Pago) trans).getMarcaDesc();
             tableModel.addRow(datos);

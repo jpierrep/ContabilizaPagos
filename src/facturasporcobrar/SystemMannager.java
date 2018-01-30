@@ -140,17 +140,23 @@ public class SystemMannager {
      //ActionPerformed del label de empresa de la tabla principal
      
      private void jComboBox2ActionPerformed(ActionEvent evt) {
-             // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-              System.out.println("siiiiii");
-             // empresa= jComboBox3.getSelectedIndex();
-          // transInicial.setEmpresa(transInicial.getjComboBox1().getSelectedIndex());
+ 
              System.out.println(transInicial.getjComboBox1().getSelectedIndex());   
+        
+           //Si la empresa  
+        if(empresa!=transInicial.getjComboBox1().getSelectedIndex()){
+            panelOpciones.setVisible(false);
+            transVer.setVisible(false);
+            
+     
+        
         // cambia la empresa, tiene  que cambiaar la data de la tabla
-             empresa=transInicial.getjComboBox1().getSelectedIndex();
+        empresa=transInicial.getjComboBox1().getSelectedIndex();
              //pasamos la data segun la empresa y llenamos la tabla
              transInicial.setTitulos(getTitulos("Facturas"));
              transInicial.setLista(getFacturasConSaldo());
              transInicial.llenarTabla();
+                }
      }
      
      // Action Performed del botón de la tabla principal 
