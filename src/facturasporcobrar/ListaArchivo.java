@@ -20,7 +20,7 @@ public class ListaArchivo extends javax.swing.JFrame {
      * Creates new form Lista
      */
    List<FacturaXC> listaFacturas;
-   SystemMannager facturaMannager=new SystemMannager();
+   FacturasPorCobrar facturaMannager=new FacturasPorCobrar();
     public ListaArchivo() {
    //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2017","2016","2015"  }));
         initComponents();

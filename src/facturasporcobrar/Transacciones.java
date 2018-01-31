@@ -27,6 +27,7 @@ public class Transacciones extends javax.swing.JFrame {
     int empresa;
     String[] titulos;
   Object lista;
+  DefaultTableModel tableModel;
     /**
      * Creates new form Transacciones
      */
@@ -205,8 +206,9 @@ public class Transacciones extends javax.swing.JFrame {
         System.out.println("dentro llenar tabla");
 
         
-        String[] datos = new String[titulos.length];
-         DefaultTableModel tableModel=new DefaultTableModel(null, titulos) ;
+        Object[] datos = new Object[titulos.length];
+         tableModel=new DefaultTableModel(null, titulos) ;
+         
         
         for (Object trans : (List) lista) {
             if (trans instanceof Pago){
@@ -224,6 +226,8 @@ public class Transacciones extends javax.swing.JFrame {
                         return Integer.class;
                         case 6:
                         return Integer.class;
+                           case 9:
+                        return Boolean.class;
                     default:
                         return String.class;
                 }
@@ -244,6 +248,7 @@ public class Transacciones extends javax.swing.JFrame {
                         return Integer.class;
                     case 2:
                         return Integer.class;
+                        
                     default:
                         return String.class;
                 }
@@ -259,17 +264,18 @@ public class Transacciones extends javax.swing.JFrame {
         for (Object trans : (List) lista) {
             if (trans instanceof Pago){
           
-            datos[0] = Integer.toString( ((Pago) trans).getIdDocumento());
-            datos[1]= Integer.toString(((Pago) trans).getNumDocumento()); 
-            datos[2] = Integer.toString(((Pago) trans).getSoftCantMovim());
-            datos[3] = Integer.toString(((Pago) trans).getSoftSaldo());  
+            datos[0] = ((Pago) trans).getIdDocumento();
+            datos[1]= ((Pago) trans).getNumDocumento(); 
+            datos[2] = ((Pago) trans).getSoftCantMovim();
+            datos[3] = ((Pago) trans).getSoftSaldo();  
             datos[4]=((Pago) trans).getSoftMinFecha();
             
             datos[5]=((Pago) trans).getFecha();
             datos[6] = ((Pago) trans).getMonto();
 
-datos[7] = Integer.toString( ((Pago) trans).getMarca());
+datos[7] = ((Pago) trans).getMarca();
 datos[8] = ((Pago) trans).getMarcaDesc();
+datos[9]= ((Pago) trans).isCkeck();
             tableModel.addRow(datos);
             }
               if (trans instanceof FacturaXC){
@@ -282,6 +288,7 @@ datos[8] = ((Pago) trans).getMarcaDesc();
        
             datos[5] = ((FacturaXC) trans).getRutAux();
             datos[6] = ((FacturaXC) trans).getNomAux();
+            
             tableModel.addRow(datos);
             }
            
@@ -354,6 +361,14 @@ datos[8] = ((Pago) trans).getMarcaDesc();
 
     public void setjLabel2(JLabel jLabel2) {
         this.jLabel2 = jLabel2;
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
     }
 
     

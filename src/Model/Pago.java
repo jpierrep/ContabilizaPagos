@@ -24,6 +24,8 @@ public class Pago {
    public int  SoftSaldo;
    public String SoftMinFecha;
    public int marca;
+   //check que dice si contabilizar o no realmente
+   public boolean ckeck=true;
    
 
     public Pago() {
@@ -115,7 +117,16 @@ public class Pago {
     public void setSoftMinFecha(String SoftMinFecha) {
         this.SoftMinFecha = SoftMinFecha;
     }
+
+    public boolean isCkeck() {
+        return ckeck;
+    }
+
+    public void setCkeck(boolean ckeck) {
+        this.ckeck = ckeck;
+    }
    
+    
    
    public String getMarcaDesc(){
                     String marcaDesc="";
