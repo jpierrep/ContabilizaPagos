@@ -91,7 +91,7 @@ public class FacturasPorCobrar {
            }        
                        
            }
-       
+       GetPagosCompletos();
        
        return pagos;
       
@@ -102,7 +102,7 @@ public class FacturasPorCobrar {
      String[] titulos = {"Nº Documento", "Saldo", "Cant. Movim.", "Fecha Emisión", "Cod. Auxiliar", "Rut Auxiliar","Nombre Auxiliar"};
      
      if (objeto.equals("Pago")){  
-      titulos= new  String []{"Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Marca Id","Marca Desc",""};
+      titulos= new  String []{"Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Total Pago","Marca Id","Marca Desc",""};
      }
       return titulos;
    }
@@ -304,7 +304,7 @@ public class FacturasPorCobrar {
                  
                   //las opciones  de idBoton son:
                    //0 total pagos // no trae el boton activado
-                   //1 registros contabilizados
+                   //1 registros contabilizados91
                    //2 registros no contabilizados
                    switch (idBoton){
                        case "1":
@@ -525,14 +525,14 @@ public class FacturasPorCobrar {
         public List<Pago> getPagosContab(){
         
          return pagos.stream().filter(
-   a -> Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8)).collect(Collectors.toList()); 
+   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))&&a.getEsPagoCompleto()==true).collect(Collectors.toList()); 
     } 
                 public List<Pago> getPagosSinContab(){
         
          return pagos.stream().filter(
                  
                  // el pago con marca 2 no se contabiliza pues ya existe (esta contabilizado, pero no es necesario mostrar)
-   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)).collect(Collectors.toList()); 
+   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)||(a.getEsPagoCompleto()==false&&!Objects.equals(a.getMarca(),2))).collect(Collectors.toList()); 
     }
       
                         public List<String> getDistinctAreas(){
@@ -581,6 +581,39 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
            //encontrados los documentos repetidos en la lista generamos log y eliminamos de las listas de pagos y Facturas
            
        }
+       
+       
+       //Evalua que los pagos por documento coincidan con el monto de los pagos
+      public void GetPagosCompletos(){
+
+            
+
+                   Map<Integer,Map<Integer, Integer>> sum = pagos.stream().collect(
+                   Collectors.groupingBy(Pago::getIdPago,Collectors.groupingBy(Pago::getMontoPagoTotalInt,
+                           Collectors.summingInt(Pago::getMontoInt))));
+            
+
+                   sum.forEach((idPago,suma)->{
+                       System.out.println(idPago+" map"+suma.toString());
+                       int montoTotal= suma.keySet().stream().findFirst().get();
+                       int montoPago= suma.values().stream().findFirst().get();
+                       if (montoTotal==montoPago)
+                  //  pagos.stream().filter(  a -> Objects.equals(a.getIdPago(),idPago)).collect(Collectors.toList()).get(0).setEsPagoCompleto(true);
+                   for(Pago p:  pagos.stream().filter(  a -> Objects.equals(a.getIdPago(),idPago)).collect(Collectors.toList())){
+                            p.setEsPagoCompleto(true);
+                    }
+                   
+                   }
+              
+              );
+//                 for(Pago p: pagos){
+//                     System.out.println(p.getIdPago()+" "+  p.getEsPagoCompleto());
+//                 } 
+          
+          
+          
+          
+      } 
        
        
 

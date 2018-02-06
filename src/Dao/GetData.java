@@ -295,7 +295,7 @@ public class GetData extends Dao {
 "\n" +
 " \n" +
 " Select Enlaze.Documento as IdDocumento, CONVERT(int,replace(Documentos.Numero,' ','')) as NumeroDocumento,enlaze.Pago as IdPago, enlaze.Monto as Monto\n" +
-",Enlaze.Fecha as 'FechaPago',tabla.cantMovim as SoftCantMovim,tabla.saldo as SoftSaldo,tabla.fecha as SoftMinFecha\n" +
+",Enlaze.Fecha as 'FechaPago',tabla.cantMovim as SoftCantMovim,tabla.saldo as SoftSaldo,tabla.fecha as SoftMinFecha,DocPago.Monto as MontoPagoTotal\n" +
 "\n" +
 "\n" +
 "From \n" +
@@ -327,7 +327,7 @@ public class GetData extends Dao {
          rs=st.getGeneratedKeys();
         
             while (rs.next()) {
-           
+             
                 
               Pago pago=new Pago(
                Integer.parseInt(rs.getObject(1).toString()),
@@ -337,9 +337,9 @@ public class GetData extends Dao {
                rs.getObject(5).toString(),
                Integer.parseInt(rs.getObject(6).toString()),
                Integer.parseInt(rs.getObject(7).toString()),
-               rs.getObject(8).toString()       
-                 
-              
+               rs.getObject(8).toString(),    
+               rs.getString("MontoPagoTotal")
+
               );
               
               //Marca 1 indica que se va directo a contabilizacion
@@ -460,15 +460,15 @@ public class GetData extends Dao {
         
          public List<Pago> getPagosSoft2(int empresa){
              List<Pago> lista = new ArrayList<>();
-             Pago p1= new Pago(998,11,888,"500","2017-02-01",2,1000,"2017-01-01");
+             Pago p1= new Pago(998,11,888,"500","2017-02-01",2,1000,"2017-01-01","0");
              p1.marca=1;
-             Pago p2= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
+             Pago p2= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02","0");
              p2.marca=4;
-             Pago p4= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02");
+             Pago p4= new Pago(997,22,777,"1000","2017-02-01",3,2000,"2017-01-02","0");
              p4.setMarca(1);
-             Pago p3= new Pago(997,22,777,"3000","2017-02-01",3,2000,"2017-01-02");
+             Pago p3= new Pago(997,22,777,"3000","2017-02-01",3,2000,"2017-01-02","0");
              p3.setMarca(1);
-             Pago p5= new Pago(997,33,777,"3000","2017-02-01",3,-12000,"2017-01-02");
+             Pago p5= new Pago(997,33,777,"3000","2017-02-01",3,-12000,"2017-01-02","0");
              p5.marca=0;
              lista.add(p1);
              lista.add(p2);

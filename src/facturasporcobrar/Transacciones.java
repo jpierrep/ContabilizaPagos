@@ -226,7 +226,9 @@ public class Transacciones extends javax.swing.JFrame {
                         return Integer.class;
                         case 6:
                         return Integer.class;
-                           case 9:
+                       case 7:
+                        return Integer.class;
+                           case 10:
                         return Boolean.class;
                     default:
                         return String.class;
@@ -272,10 +274,10 @@ public class Transacciones extends javax.swing.JFrame {
             
             datos[5]=((Pago) trans).getFecha();
             datos[6] = ((Pago) trans).getMonto();
-
-datos[7] = ((Pago) trans).getMarca();
-datos[8] = ((Pago) trans).getMarcaDesc();
-datos[9]= ((Pago) trans).isCkeck();
+            datos[7] = ((Pago) trans).getMontoPagoTotal();
+datos[8] = ((Pago) trans).getMarca();
+datos[9] = ((Pago) trans).getMarcaDesc();
+datos[10]= ((Pago) trans).isCkeck();
             tableModel.addRow(datos);
             }
               if (trans instanceof FacturaXC){

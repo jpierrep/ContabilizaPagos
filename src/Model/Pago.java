@@ -26,7 +26,8 @@ public class Pago {
    public int marca;
    //check que dice si contabilizar o no realmente
    public boolean ckeck=true;
-   
+   public String montoPagoTotal;
+   public boolean esPagoCompleto=false;
 
     public Pago() {
     }
@@ -39,7 +40,7 @@ public class Pago {
         this.marca = marca;
     }
 
-    public Pago(int idDocumento, int numDocumento, int idPago, String monto, String fecha, int SoftCantMovim, int SoftSaldo, String SoftUltFecha) {
+    public Pago(int idDocumento, int numDocumento, int idPago, String monto, String fecha, int SoftCantMovim, int SoftSaldo, String SoftUltFecha, String montoPagoTotal) {
         this.idDocumento = idDocumento;
         this.numDocumento = numDocumento;
         this.idPago = idPago;
@@ -48,6 +49,7 @@ public class Pago {
         this.SoftCantMovim = SoftCantMovim;
         this.SoftSaldo = SoftSaldo;
         this.SoftMinFecha = SoftUltFecha;
+        this.montoPagoTotal=montoPagoTotal;
     }
 
     public int getIdDocumento() {
@@ -164,6 +166,30 @@ public class Pago {
  String fechaString=dfResult.format(fechaFormat);
  return fechaString;
  
+  
     }
 
+    public String getMontoPagoTotal() {
+        return montoPagoTotal;
+    }
+    
+        public int getMontoPagoTotalInt() {
+        return Integer.parseInt(montoPagoTotal);
+    }
+
+    public void setMontoPagoTotal(String montoPagoTotal) {
+        this.montoPagoTotal = montoPagoTotal;
+    }
+
+    public boolean getEsPagoCompleto() {
+        return esPagoCompleto;
+    }
+
+    public void setEsPagoCompleto(boolean esPagoCompleto) {
+        this.esPagoCompleto = esPagoCompleto;
+    }
+
+    
+    
+    
 }
