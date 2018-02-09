@@ -19,14 +19,25 @@ public class Pago {
    public int numDocumento; 
    public int idPago;
    public String monto;
+   //fecha de la tabla registro Enlaze
    public String fecha;
+   //fecha de la tabla registro DocPago
+   public String fechaGral;
+   public String tipo;
+   public String numero;
+   public String rutCliente;
+   public String codigoCliente;
+   
    public int SoftCantMovim;
    public int  SoftSaldo;
    public String SoftMinFecha;
    public int marca;
    //check que dice si contabilizar o no realmente
    public boolean ckeck=true;
+   //corresponde al monto total segun id pago
    public String montoPagoTotal;
+   //corresponde al monto del pago posible de contabilizar
+   public String montoPagoPosible;
    public boolean esPagoCompleto=false;
 
     public Pago() {
@@ -41,6 +52,7 @@ public class Pago {
     }
 
     public Pago(int idDocumento, int numDocumento, int idPago, String monto, String fecha, int SoftCantMovim, int SoftSaldo, String SoftUltFecha, String montoPagoTotal) {
+       
         this.idDocumento = idDocumento;
         this.numDocumento = numDocumento;
         this.idPago = idPago;
@@ -189,6 +201,89 @@ public class Pago {
         this.esPagoCompleto = esPagoCompleto;
     }
 
+    public String getMontoPagoPosible() {
+        return montoPagoPosible;
+    }
+
+    public void setMontoPagoPosible(String montoPagoPosible) {
+        this.montoPagoPosible = montoPagoPosible;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String Numero) {
+        this.numero = Numero;
+    }
+
+    public String getFechaGral() {
+        return fechaGral;
+    }
+
+    public void setFechaGral(String fechaGral) {
+        this.fechaGral = fechaGral;
+    }
+
+    public String getRutCliente() {
+        return rutCliente;
+    }
+
+    public void setRutCliente(String rutCliente) {
+        this.rutCliente = rutCliente;
+    }
+
+    public String getCodigoCliente() {
+        return codigoCliente;
+    }
+
+    public void setCodigoCliente(String codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
+
+    
+    public String getTipoPagoDesc(){
+        String tipoPagoDesc="";
+   int tipoInt=Integer.parseInt(tipo);
+        
+        switch (tipoInt){
+            
+          
+ case  1:  tipoPagoDesc= "Cheque";
+ break;
+ case  2:  tipoPagoDesc= "Efectivo";
+  break;
+ case  3:  tipoPagoDesc= "Tarjeta de Crédito";
+  break;
+ case  4:  tipoPagoDesc= "Nota de Crédito";
+  break;
+ case  5:  tipoPagoDesc= "Cheque Fiscal";
+  break;
+ case  6:  tipoPagoDesc= "Depósito Directo";
+  break;
+ case  7:  tipoPagoDesc= "Ajuste Positivo";
+  break;
+ case  8:  tipoPagoDesc= "Castigo";
+  break;
+ case  9:  tipoPagoDesc= "Vale Vista";
+  break;
+ case  10:  tipoPagoDesc= "Servipag";
+  break;      
+        }
+        
+        
+        return tipoPagoDesc;
+        
+        
+    }
     
     
     

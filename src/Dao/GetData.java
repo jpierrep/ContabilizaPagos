@@ -295,7 +295,8 @@ public class GetData extends Dao {
 "\n" +
 " \n" +
 " Select Enlaze.Documento as IdDocumento, CONVERT(int,replace(Documentos.Numero,' ','')) as NumeroDocumento,enlaze.Pago as IdPago, enlaze.Monto as Monto\n" +
-",Enlaze.Fecha as 'FechaPago',tabla.cantMovim as SoftCantMovim,tabla.saldo as SoftSaldo,tabla.fecha as SoftMinFecha,DocPago.Monto as MontoPagoTotal\n" +
+",Enlaze.Fecha as 'FechaPago',tabla.cantMovim as SoftCantMovim,tabla.saldo as SoftSaldo,tabla.fecha as SoftMinFecha,DocPago.Monto as MontoPagoTotal"
+                        + ",DocPago.Fecha as FechaGral,DocPago.tipo as TipoPago,DocPago.Numero as NumeroPago, DocPago.Rut as RutCliente,DocPago.Codigo as CodigoCliente\n" +
 "\n" +
 "\n" +
 "From \n" +
@@ -341,6 +342,17 @@ public class GetData extends Dao {
                rs.getString("MontoPagoTotal")
 
               );
+          
+              //                        + ",DocPago.Fecha as FechaGral,DocPago.tipo as tipoPago,DocPago.Numero as NumeroPago, DocPago.Rut as RutCliente,DocPago.Codigo as CodigoCliente\n" +
+              
+              //Se añaden nuevas caracteristicas aparte ya que harian al constructor muy ilegibles
+              pago.setFechaGral(rs.getString("FechaGral"));
+              pago.setTipo(rs.getString("TipoPago"));
+              pago.setNumero(rs.getString("NumeroPago"));
+              pago.setRutCliente(rs.getString("RutCliente"));
+              pago.setCodigoCliente(rs.getString("CodigoCliente"));
+              
+              
               
               //Marca 1 indica que se va directo a contabilizacion
               //
