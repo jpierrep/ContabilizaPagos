@@ -43,7 +43,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         //       super( "JButtonTable Example" );
         initComponents();
-        jLabel1.setText("Listado de Facturas con Saldo");
+        jLabel1.setText("Listado de Facturas con Saldo ERP");
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GuardService Seguridad S.A.","GS Tecnologías S.A.","GS Outsourcing S.A.","Inversiones Odin Ltda."  }));
      jProgressBar1.setVisible(false);
      jLabel2.setVisible(false);
@@ -219,7 +219,30 @@ public class Transacciones extends javax.swing.JFrame {
         
         for (Object trans : (List) lista) {
 
-            if (trans instanceof Pago &&!identificador.equals("DISTINCT_PAGO")){
+            if (trans instanceof Pago &&identificador.equals("DISTINCT_PAGO")){
+              tableModel = new DefaultTableModel(null, titulos){   
+            @Override
+            public Class getColumnClass(int column) {
+                 switch (column) {
+                    case 0:
+                        return Boolean.class;
+                     case 1:
+                        return Integer.class;
+                
+                    case 3:
+                        return Integer.class;
+                        case 4:
+                     
+                    default:
+                        return String.class;
+                }
+            }
+          };
+                System.out.println("es pago");
+              break;
+             }  
+            
+         else   if (trans instanceof Pago &&!identificador.equals("DISTINCT_PAGO")){
               tableModel = new DefaultTableModel(null, titulos){   
             @Override
             public Class getColumnClass(int column) {
@@ -238,8 +261,7 @@ public class Transacciones extends javax.swing.JFrame {
                         return Integer.class;
                        case 8:
                         return Integer.class;
-                           case 11:
-                        return Boolean.class;
+
                     default:
                         return String.class;
                 }
@@ -249,7 +271,7 @@ public class Transacciones extends javax.swing.JFrame {
               break;
              }
             
-              if (trans instanceof FacturaXC){
+            else if (trans instanceof FacturaXC){
               tableModel = new DefaultTableModel(null, titulos){   
             @Override
             public Class getColumnClass(int column) {
@@ -287,18 +309,19 @@ public class Transacciones extends javax.swing.JFrame {
             datos[8] = ((Pago) trans).getMontoPagoTotal();
 datos[9] = ((Pago) trans).getMarca();
 datos[10] = ((Pago) trans).getMarcaDesc();
-datos[11]= ((Pago) trans).isCkeck();
+//datos[11]= ((Pago) trans).isCkeck();
             tableModel.addRow(datos);
             }
        else  if (trans instanceof Pago &&identificador.equals("DISTINCT_PAGO")){
-            datos[0] = ((Pago) trans).getIdPago();
-             datos[1] = ((Pago) trans).getNumero();
-            datos[2] = ((Pago) trans).getMontoPagoTotal();
-            datos[3] = ((Pago) trans).getMontoPagoPosible();
-            datos[4] = ((Pago) trans).getFechaGral();
-            datos[5] = ((Pago) trans).getTipoPagoDesc();
-            datos[6] = ((Pago) trans).getCodigoCliente();
-            datos[7] = ((Pago) trans).getRutCliente();
+           datos[0] =  ((Pago) trans).isCkeck();
+           datos[1] = ((Pago) trans).getIdPago();
+             datos[2] = ((Pago) trans).getNumero();
+            datos[3] = ((Pago) trans).getMontoPagoTotal();
+            datos[4] = ((Pago) trans).getMontoPagoPosible();
+            datos[5] = ((Pago) trans).getFechaGral();
+            datos[6] = ((Pago) trans).getTipoPagoDesc();
+            datos[7] = ((Pago) trans).getCodigoCliente();
+            datos[8] = ((Pago) trans).getRutCliente();
             tableModel.addRow(datos);
             }
             else  if (trans instanceof FacturaXC){

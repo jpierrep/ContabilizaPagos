@@ -106,7 +106,9 @@ public class FacturasPorCobrar {
      String[] titulos = {"Nº Documento", "Saldo", "Cant. Movim.", "Fecha Emisión", "Cod. Auxiliar", "Rut Auxiliar","Nombre Auxiliar"};
      
      if (objeto.equals("Pago")){  
-      titulos= new  String []{ "Id Pago","Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Total Pago","Marca Id","Marca Desc",""};
+      titulos= new  String []{ "Id Pago","Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Total Pago","Marca Id","Marca Desc"};
+     }else if   (objeto.equals("PagoDistinct")){  
+      titulos= new  String []{ "","Id Pago", "Número", "Pago Monto","Monto a Contab.","Fecha", "Tipo", "Cliente","Rut"};
      }
       return titulos;
    }
@@ -301,12 +303,15 @@ public class FacturasPorCobrar {
   //Listener de doble click de la tabla para revisar opciones
    private void rowPressedTable(int row) {
        // en este instante debemos obtener el id del pago mostrado por transVer
-       // tiene que estar en la columna 0
-      int idPago=Integer.parseInt(transVer.getTableModel().getValueAt(row,0).toString());
+       // tiene que estar en la columna 1
+      int idPago=Integer.parseInt(transVer.getTableModel().getValueAt(row,1).toString());
        System.out.println("el id pago seleccionado es"+idPago);
          
        //Llenar la tabla con los pagos correspondientes al id Solicitado
        transPagos.setTitulos(getTitulos("Pago"));
+       transPagos.getjComboBox1().setVisible(false);
+       transPagos.getjButton1().setVisible(false);
+       transPagos.getjLabel1().setText("Detalle Facturas por Pago");
       transPagos.setLista(pagos.stream().filter(  a -> a.getIdPago()==idPago).collect(Collectors.toList())); // aca se llenan las facturas
    
       transPagos.llenarTabla();
@@ -383,10 +388,10 @@ public class FacturasPorCobrar {
                transVer.getjButton1().setVisible(false);
                transVer.getjLabel1().setText(tituloTabla);
                transVer.setIdentificador(identificador);
-               transVer.setTitulos(getTitulos("Pago"));
+               transVer.setTitulos(getTitulos("PagoDistinct"));
                transVer.setLista(lista);
                //llenamos con el total
-               transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoTotalInt()).sum())));
+               transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoPosibleInt()).sum())));
                transVer.getjLabel2().setVisible(true);
                transVer.llenarTabla(); 
                transVer.setVisible(true);
@@ -599,11 +604,14 @@ public class FacturasPorCobrar {
        }
        
        public void getChecks(){
-          int a=0;
-           for(Pago p:getPagosContab()){
-               p.setCkeck((Boolean)transVer.getTableModel().getValueAt(a,9));
-               System.out.println((Boolean)transVer.getTableModel().getValueAt(a,9));
-            a++;   
+          //indice de filas comienza en 0 
+           int fila=0;
+           int columna=0;
+          
+           for(Pago p: getDistinctPagos(getPagosContab())){
+               p.setCkeck((Boolean)transVer.getTableModel().getValueAt(fila,columna)); // la columna check estara al comienzo columna 0
+               System.out.println((Boolean)transVer.getTableModel().getValueAt(fila,columna));
+            fila++;   
            }
            
            
@@ -649,10 +657,9 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
                        //el valor del pago posible según los pagos obtenidos y que aplicarian a contabilizar
                        for(Pago p:pagos){
                            if(p.getIdPago()==idPago){
-                               if(montoPago==montoPago){
+                               if(montoPago==montoTotal){
                                  p.setEsPagoCompleto(true);
-                               }
-                             
+                               }   
                                p.setMontoPagoPosible(montoPago+""); 
                            }
 
@@ -675,7 +682,9 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
 //                 } 
           
 
-          
+          for(Pago p:pagos){
+              System.out.println("es pago completo "+p.getEsPagoCompleto());
+          }
           
           
       } 

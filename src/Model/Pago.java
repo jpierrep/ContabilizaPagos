@@ -204,6 +204,9 @@ public class Pago {
     public String getMontoPagoPosible() {
         return montoPagoPosible;
     }
+      public int getMontoPagoPosibleInt() {
+        return Integer.parseInt(montoPagoPosible);
+    }
 
     public void setMontoPagoPosible(String montoPagoPosible) {
         this.montoPagoPosible = montoPagoPosible;
