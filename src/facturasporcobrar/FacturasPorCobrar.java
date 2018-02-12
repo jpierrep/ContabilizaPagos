@@ -215,6 +215,7 @@ public class FacturasPorCobrar {
           System.out.println("dentro panel system");
         
         List<String> listaArea= getDistinctAreas();
+        List<Integer> listIdPago=getDistinctIdPago();
      
         
         //se deben generar los archivos solo de las areas cuadradas
@@ -247,10 +248,12 @@ public class FacturasPorCobrar {
           try {
              
               for (String area:listaArea){
-                 List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getFactura().getAreaCod(),area)&&(a.getPago().isCkeck())).collect(Collectors.toList());
+                String nombreArchivo = Integer.toString(empresa)+"-"+area;  
+               for   (Integer idPago:listIdPago){
+                 List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getPago().getIdPago(),idPago)&&Objects.equals(a.getFactura().getAreaCod(),area)&&(a.getPago().isCkeck())).collect(Collectors.toList());
                  // List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getFactura().getAreaCod(),area)).collect(Collectors.toList());
                  // exportarMovimientos(getFacPago(),filepath,Integer.toString(empresa)+"-"+area);
-               String nombreArchivo = Integer.toString(empresa)+"-"+area;
+               
                if (area==null)
                    nombreArchivo = Integer.toString(empresa)+"-SinArea"; 
                      
@@ -258,11 +261,8 @@ public class FacturasPorCobrar {
                  exportarMovimientos(p,filepath,nombreArchivo) ;        
                  
                 
-             
+              }
               } //fin for
-              
-              
-              
          
               JOptionPane.showMessageDialog(null,"Archivos generado correctamente.","Exito",JOptionPane.INFORMATION_MESSAGE);
           } catch (IOException ex) {
@@ -391,8 +391,9 @@ public class FacturasPorCobrar {
                transVer.setTitulos(getTitulos("PagoDistinct"));
                transVer.setLista(lista);
                //llenamos con el total
-               transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoPosibleInt()).sum())));
-               transVer.getjLabel2().setVisible(true);
+             //  transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoPosibleInt()).sum())));
+            transVer.getjLabel2().setText("0");
+             transVer.getjLabel2().setVisible(true);
                transVer.llenarTabla(); 
                transVer.setVisible(true);
                
@@ -515,7 +516,7 @@ public class FacturasPorCobrar {
         PrintWriter pwLog = null;
         try
         {
-            fichero = new FileWriter(realPath);//decir si se sobreescribe
+            fichero = new FileWriter(realPath,true);//decir si se sobreescribe
             ficheroLog= new FileWriter(pathLog,true);
           
             pw = new PrintWriter(fichero);
@@ -540,14 +541,14 @@ public class FacturasPorCobrar {
                 cuentaBanco="N/A";
             }
             
-                        
+                pw.println(cuentaBanco+","+lista.get(0).getPago().getMontoPagoTotal()+",0,"+lista.get(0).getFactura().getNomAuxSinComas()+",,,,,,,,,,,,,,,,DP,62,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");          
             
                for (FacPago termino: lista){        
                    
  
          
              pw.println("10-01-065,0,"+termino.getPago().getMonto()+","+termino.getFactura().getNomAuxSinComas()+" [P: "+termino.getPago().getIdPago()+" D: "+termino.getPago().getIdDocumento()+"],,,,,,,,,,,,,,,"+termino.getFactura().getCodAux()+",DP,62,"+termino.getPago().getFechaFormat()+ ","+termino.getPago().getFechaFormat()+",FV,"+termino.getPago().getNumDocumento()+" ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");  
-              pw.println(cuentaBanco+","+termino.getPago().getMonto()+",0,"+termino.getFactura().getNomAuxSinComas()+",,,,,,,,,,,,,,,,DP,62,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"); 
+             
                              
             }
             
@@ -586,19 +587,25 @@ public class FacturasPorCobrar {
           List<Pago> p=  pagos.stream().filter(
                  
                  // el pago con marca 2 no se contabiliza pues ya existe (esta contabilizado, pero no es necesario mostrar)
-   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)||(a.getEsPagoCompleto()==false&&!Objects.equals(a.getMarca(),2))).collect(Collectors.toList()); 
+   a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)||(Objects.equals(a.getMarca(),2))).collect(Collectors.toList()); 
    
             //añadimos todos los pagosContab que no son pagos completos a la lista de no contabilizacion
-         List <Pago> contabFalse = pagos.stream().filter(
-   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))).collect(Collectors.toList());
-           List<Pago> q= GetPagosCompletos(contabFalse).stream().filter(a-> a.getEsPagoCompleto()==false).collect(Collectors.toList());
-            p.addAll(q);
-            return p;
+//         List <Pago> contabFalse = pagos.stream().filter(
+//   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))).collect(Collectors.toList());
+//         
+//           List<Pago> q= GetPagosCompletos(contabFalse).stream().filter(a-> a.getEsPagoCompleto()==false).collect(Collectors.toList());
+//            p.addAll(q);
+            return GetPagosCompletos(p);
                 }
       
                         public List<String> getDistinctAreas(){
         
          return facturasConSaldo.stream().map(x -> x.getAreaCod()).distinct().collect(Collectors.toList());
+    } 
+                        
+       public List<Integer> getDistinctIdPago(){
+        
+         return getPagosContab().stream().map(x ->x.getIdPago()).distinct().collect(Collectors.toList());
     } 
                 
        public List<FacPago> getFacPago(){
@@ -650,12 +657,25 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
        //Evalua que los pagos por documento coincidan con el monto de los pagos
       public  List<Pago> GetPagosCompletos(List<Pago> lista){
 
+          for(Pago list:lista){
+            if (list.getIdPago()==269773){
+                System.out.println("la lista idPago= "+list.getIdPago()+","+list.getMontoPagoTotalInt()+","+list.getMontoInt());
+            }
+              
+          }
 
-
-                   Map<Integer,Map<Integer, Integer>> sum = lista.stream().collect(
+                  
+          Map<Integer,Map<Integer, Integer>> sum = lista.stream().collect(
                    Collectors.groupingBy(Pago::getIdPago,Collectors.groupingBy(Pago::getMontoPagoTotalInt,
                            Collectors.summingInt(Pago::getMontoInt))));
-            
+                   
+                    sum.forEach((idPago,suma)->{
+                    if (idPago==269773){
+                        System.out.println("dentro del pago 269773 "+suma.keySet().stream().findFirst().get()+" "+suma.values().stream().findFirst().get());
+                    }
+                    });
+                            
+
 
                    sum.forEach((idPago,suma)->{
                        System.out.println(idPago+" map"+suma.toString());
@@ -665,9 +685,11 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
                        //seteamos true si el monto del pago esta completo y false si no ademas seteamos
                        //el valor del pago posible según los pagos obtenidos y que aplicarian a contabilizar
                        for(Pago p:lista){
-
-                           
+                       
+                            //   p.setEsPagoCompleto(false);
                            if(p.getIdPago()==idPago){
+                               p.setEsPagoCompleto(false);
+                              
                                if(p.getIdPago()==269773){
                                    System.out.println("monto "+montoPago+" "+montoTotal);
                                }
@@ -675,6 +697,7 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
                                if(montoPago==montoTotal){
                                  p.setEsPagoCompleto(true);
                                }   
+                             //  p.setMontoPagoPosible(montoPago+"");
                                p.setMontoPagoPosible(montoPago+""); 
                            }
 
