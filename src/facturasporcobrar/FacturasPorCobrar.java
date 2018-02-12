@@ -95,7 +95,7 @@ public class FacturasPorCobrar {
            }        
                        
            }
-       GetPagosCompletos();
+    
        
        return pagos;
       
@@ -411,7 +411,6 @@ public class FacturasPorCobrar {
             
         }
     }
-
                });
               
           }
@@ -575,17 +574,27 @@ public class FacturasPorCobrar {
     }
             
         public List<Pago> getPagosContab(){
-        
-         return pagos.stream().filter(
-   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))&&a.getEsPagoCompleto()==true).collect(Collectors.toList()); 
-    } 
+        //primero obtenemos los que tienen marca para contabilizacion
+        List<Pago> p= pagos.stream().filter(
+   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))).collect(Collectors.toList());
+        //evaluamos si   
+        return  GetPagosCompletos(p).stream().filter(a-> a.getEsPagoCompleto()==true).collect(Collectors.toList());
+         
+        } 
                 public List<Pago> getPagosSinContab(){
         
-         return pagos.stream().filter(
+          List<Pago> p=  pagos.stream().filter(
                  
                  // el pago con marca 2 no se contabiliza pues ya existe (esta contabilizado, pero no es necesario mostrar)
    a -> Objects.equals(a.getMarca(),0)||Objects.equals(a.getMarca(),3)||Objects.equals(a.getMarca(),9)||(a.getEsPagoCompleto()==false&&!Objects.equals(a.getMarca(),2))).collect(Collectors.toList()); 
-    }
+   
+            //añadimos todos los pagosContab que no son pagos completos a la lista de no contabilizacion
+         List <Pago> contabFalse = pagos.stream().filter(
+   a -> (Objects.equals(a.getMarca(),1)||Objects.equals(a.getMarca(),4)||Objects.equals(a.getMarca(),7)||Objects.equals(a.getMarca(),8))).collect(Collectors.toList());
+           List<Pago> q= GetPagosCompletos(contabFalse).stream().filter(a-> a.getEsPagoCompleto()==false).collect(Collectors.toList());
+            p.addAll(q);
+            return p;
+                }
       
                         public List<String> getDistinctAreas(){
         
@@ -639,11 +648,11 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
        
        
        //Evalua que los pagos por documento coincidan con el monto de los pagos
-      public void GetPagosCompletos(){
+      public  List<Pago> GetPagosCompletos(List<Pago> lista){
 
-            
 
-                   Map<Integer,Map<Integer, Integer>> sum = pagos.stream().collect(
+
+                   Map<Integer,Map<Integer, Integer>> sum = lista.stream().collect(
                    Collectors.groupingBy(Pago::getIdPago,Collectors.groupingBy(Pago::getMontoPagoTotalInt,
                            Collectors.summingInt(Pago::getMontoInt))));
             
@@ -655,8 +664,14 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
                
                        //seteamos true si el monto del pago esta completo y false si no ademas seteamos
                        //el valor del pago posible según los pagos obtenidos y que aplicarian a contabilizar
-                       for(Pago p:pagos){
+                       for(Pago p:lista){
+
+                           
                            if(p.getIdPago()==idPago){
+                               if(p.getIdPago()==269773){
+                                   System.out.println("monto "+montoPago+" "+montoTotal);
+                               }
+                               
                                if(montoPago==montoTotal){
                                  p.setEsPagoCompleto(true);
                                }   
@@ -682,11 +697,9 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
 //                 } 
           
 
-          for(Pago p:pagos){
-              System.out.println("es pago completo "+p.getEsPagoCompleto());
-          }
+  
           
-          
+          return lista;
       } 
       
       public List<Pago> getDistinctPagos(List<Pago> pagos){
