@@ -191,7 +191,7 @@ public class Transacciones extends javax.swing.JFrame {
                 Transacciones transacciones= new Transacciones();
                 String[] titulos = {"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
                 GetData data = new GetData();
-                List<Pago> listaTrans = data.getPagosSoft(0);
+                List<Pago> listaTrans = data.getPagosSoft(0,"");
                 transacciones.llenarTabla();
                 transacciones.setVisible(true);
             }

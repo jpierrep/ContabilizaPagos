@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,6 +54,8 @@ public class FacturasPorCobrar {
     Transacciones transVer= new Transacciones();
     Transacciones transPagos=new Transacciones();
     PanelOpciones panelOpciones= new PanelOpciones(); //=new PanelOpciones("aa");
+    FechasPago periodo= new FechasPago();
+    String periodoString="";
     String duplicates="";
     
     
@@ -79,7 +82,7 @@ public class FacturasPorCobrar {
    
    public List<Pago> getPagos(){
         
-       pagos= data.getPagosSoft(empresa);
+       pagos= data.getPagosSoft(empresa,periodoString);
        
         //Sólo si hay duplicados, eliminarlos
              if (!duplicates.equals("")){
@@ -169,8 +172,32 @@ public class FacturasPorCobrar {
      
      private void jButton1ActionPerformed(ActionEvent evt) {
          
+        periodo.setVisible(true);
         
-         if (!panelOpciones.isVisible()){
+                   periodo.getjButton1().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            jButton1Periodo(evt);
+               
+            }
+
+        });
+
+     }
+     
+     //Accion del botón periodo
+      private void jButton1Periodo(ActionEvent evt) {
+          
+          System.out.println(periodo.getjXDatePicker2String());
+          System.out.println(periodo.getjXDatePicker1String());
+          periodoString="'"+periodo.getjXDatePicker1String()+"' and '"+periodo.getjXDatePicker2String()+"'";
+          System.out.println(periodoString);
+        
+          if(validaFecha(periodo.getjXDatePicker1String())&&validaFecha(periodo.getjXDatePicker2String())){
+           periodoString="'"+periodo.getjXDatePicker1String()+"' and '"+periodo.getjXDatePicker2String()+"'";
+          
+             if (!panelOpciones.isVisible()){
+             
+            
   
         transInicial.getjProgressBar1().setVisible(true);
          //obtenemos los pagos y se llenará la variable pagos
@@ -188,7 +215,8 @@ public class FacturasPorCobrar {
             
       
         }
-         
+ 
+                  
            panelOpciones.getButton1().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
             jButton1PanelOpc(evt);
@@ -200,10 +228,20 @@ public class FacturasPorCobrar {
      transInicial.getjProgressBar1().setVisible(false);
         panelOpciones.setVisible(true);
       //  panelOpciones.setAlwaysOnTop(true);
-         
-    
+     
+      
+      //es necesario llenar la tabla de pagos que se contabilizarán para que no de null si no se abre
+    llenaTablaVista(getDistinctPagos(getPagosContab()),"Listado Pagos a Contabilizar","DISTINCT_PAGO");
+      
+      
          }
-     }
+     
+          }else{
+
+          System.out.println("fechas invalidas");
+          
+          }
+      }
      
      //Accion del botón del panel de opciones
       private void jButton1PanelOpc(ActionEvent evt) {
@@ -339,11 +377,13 @@ public class FacturasPorCobrar {
                        case "1":
  
            llenaTablaVista(getDistinctPagos(getPagosContab()),"Listado Pagos a Contabilizar","DISTINCT_PAGO");
-               break;
+             transVer.setVisible(true);   
+           break;
                        case "2":
                            
     llenaTablaVista(getDistinctPagos(getPagosSinContab()),"Listado Pagos no posibles de contabilizar","DISTINCT_PAGO");
-               break;
+      transVer.setVisible(true);          
+    break;
                         
                        
                    }
@@ -391,11 +431,11 @@ public class FacturasPorCobrar {
                transVer.setTitulos(getTitulos("PagoDistinct"));
                transVer.setLista(lista);
                //llenamos con el total
-             //  transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoPosibleInt()).sum())));
-            transVer.getjLabel2().setText("0");
+              transVer.getjLabel2().setText("Monto total: "+ Integer.toString((lista.stream().mapToInt(i -> i.getMontoPagoPosibleInt()).sum())));
+          //  transVer.getjLabel2().setText("0");
              transVer.getjLabel2().setVisible(true);
                transVer.llenarTabla(); 
-               transVer.setVisible(true);
+             
                
                transVer.getjTable1().      //Listener de los pagos de la tabla
            
@@ -759,7 +799,19 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
       }
        
        
-
+  public boolean validaFecha(String fecha){
+      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+      
+       try {
+          format.parse(fecha);
+          return true;
+     }
+     catch(ParseException e){
+          return false;
+     }
+  }
+      
+      
                 
    public static void main(String args[]) {
   

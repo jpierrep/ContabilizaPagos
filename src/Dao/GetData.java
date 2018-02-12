@@ -273,9 +273,12 @@ public class GetData extends Dao {
 
          // procedimiento que cruza los documentos no saldados con los pagos recibidos 
      
-         public List<Pago> getPagosSoft(int empresa){
+         public List<Pago> getPagosSoft(int empresa,String periodo){
              
+        String queryPeriodo="";
         
+        if(!periodo.equals(""))
+            queryPeriodo="and DocPago.Fecha between "+periodo;
     
         PreparedStatement stmt = null;
         ResultSet rs = null; 
@@ -312,7 +315,8 @@ public class GetData extends Dao {
 "inner join @tabla as tabla on tabla.MovNumDocRef=CONVERT(int,replace(Documentos.Numero,' ',''))\n" +
 "\n" +
 "Where  DocPago.Empresa ="+empresa+" And DocPago.Tipo in ( 1, 2, 3, 5, 6, 9, 10 ) --todos los tipos de pago menos castigo nota credito nota debito \n" +
-"and Documentos.Tipo  In ( 1)  --solo facturas facturas\n" +
+"and Documentos.Tipo  In ( 1)  --solo facturas facturas \n"
+                        +queryPeriodo+"\n" +
 "\n" +
 "order by Enlaze.Pago asc";
                         
