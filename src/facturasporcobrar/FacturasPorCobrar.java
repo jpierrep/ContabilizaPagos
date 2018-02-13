@@ -324,6 +324,7 @@ public class FacturasPorCobrar {
         //Llenar la tabla con los pagos correspondientes al id Solicitado
         transPagos.setTitulos(getTitulos("Pago"));
         transPagos.getjComboBox1().setVisible(false);
+        transPagos.getjLabel3().setVisible(false);
         transPagos.getjButton1().setVisible(false);
         transPagos.getjLabel1().setText("Detalle Facturas por Pago");
         transPagos.setLista(pagos.stream().filter(a -> a.getIdPago() == idPago).collect(Collectors.toList())); // aca se llenan las facturas
@@ -390,6 +391,7 @@ public class FacturasPorCobrar {
 
         transVer.setVisible(false);
         transVer.getjComboBox1().setVisible(false);
+        transVer.getjLabel3().setVisible(false);
         transVer.getjButton1().setVisible(false);
         transVer.getjLabel1().setText(tituloTabla);
         transVer.setIdentificador(identificador);
