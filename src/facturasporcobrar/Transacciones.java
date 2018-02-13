@@ -325,6 +325,7 @@ datos[10] = ((Pago) trans).getMarcaDesc();
             datos[6] = ((Pago) trans).getTipoPagoDesc();
             datos[7] = ((Pago) trans).getCodigoCliente();
             datos[8] = ((Pago) trans).getRutCliente();
+           datos[9] = ((Pago) trans).getListadoFacturas();
             tableModel.addRow(datos);
             }
             else  if (trans instanceof FacturaXC){

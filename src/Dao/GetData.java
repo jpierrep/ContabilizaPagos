@@ -20,6 +20,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
 /**
@@ -365,7 +367,7 @@ public class GetData extends Dao {
                     pago.marca=1;
                 
                 }else {
-   String querySoft = "select MovFe,convert(int,MovHaber) as MovHaber\n" +
+   String querySoft = "select MovFe,convert(int,MovHaber) as MovHaber,MovGlosa\n" +
 "    FROM "+getNombreEmpresa(empresa)+".[softland].[cwmovim] as mov\n" +
 "    left join "+getNombreEmpresa(empresa)+".[softland].[cwtauxi] as aux on mov.CodAux=AUX.CodAux\n" +
 " left join "+getNombreEmpresa(empresa)+".softland.cwcpbte as comp on comp.CpbNum=mov.CpbNum\n" +
@@ -383,6 +385,7 @@ public class GetData extends Dao {
       Pago pagoSoftland=new Pago ();
        pagoSoftland.fecha=rsSoft.getObject(1).toString();
         pagoSoftland.monto=rsSoft.getObject(2).toString();
+        pagoSoftland.glosa=rsSoft.getObject(3).toString();
        pagosSoftland.add(pagoSoftland);
           //System.out.println("pago:"+pago.numDocumento+" "+pagoSoftland.getMonto());    
     }
@@ -392,15 +395,17 @@ public class GetData extends Dao {
      //porque el pago no coincide con ninguno de los registrados para ese documento valor 4
         pago.marca=4;
         for(Pago p:pagosSoftland){
-          //  System.out.println("dentro pago"+ p.fecha);
-            if (pago.numDocumento==207629){
-                System.out.println("pago softland "+p.fecha+" monto "+p.monto+ " pago ventas "+pago.fecha+" monto"+pago.monto);  
-            }
-            
-           //si dentro del pago existe otro con ese monto y fecha, no contabilizar y marcar con 2
-            if (p.fecha.equals(pago.fecha)&&p.monto.equals(pago.monto)){
-          pago.marca=2;      
-         break ;   
+
+     String patternGlosa="[P: "+pago.getIdPago()+" D: "+pago.getIdDocumento()+"]";
+
+           if(p.glosa.contains(patternGlosa)) {
+             //si existe el pago contabilizado  (segun patron en la glosa)
+               pago.marca=2;      
+
+           }else if (p.fecha.equals(pago.fecha)&&p.monto.equals(pago.monto)){
+          //si dentro del pago existe otro con ese monto y fecha, no contabilizar y marcar con 2
+               pago.marca=2;      
+             break ;   
            // si en el pago solo coincide el monto, no contabilizar y marcarlo con 3 
            }else if((!p.fecha.equals(pago.fecha))&&(p.monto.equals(pago.monto))){
                  pago.marca=3;

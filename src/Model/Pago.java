@@ -39,6 +39,9 @@ public class Pago {
    //corresponde al monto del pago posible de contabilizar
    public String montoPagoPosible;
    public boolean esPagoCompleto=false;
+   //Cuando un pago tiene varias facturas, se añade acá el listado separado por coma
+   public String ListadoFacturas;
+   public String glosa;
 
     public Pago() {
     }
@@ -287,6 +290,24 @@ public class Pago {
         
         
     }
+
+    public String getListadoFacturas() {
+        return ListadoFacturas;
+    }
+
+    public void setListadoFacturas(String ListadoFacturas) {
+        this.ListadoFacturas = ListadoFacturas;
+    }
+
+    public String getGlosa() {
+        return glosa;
+    }
+
+    public void setGlosa(String glosa) {
+        this.glosa = glosa;
+    }
+
+
     
     
     

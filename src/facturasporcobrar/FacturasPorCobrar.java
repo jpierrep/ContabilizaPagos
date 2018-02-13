@@ -111,7 +111,7 @@ public class FacturasPorCobrar {
      if (objeto.equals("Pago")){  
       titulos= new  String []{ "Id Pago","Id Doc.", "Numero Doc.", "Cant. Mov.","Saldo Doc.","Fecha Doc.", "Fecha Pago", "Monto Pago","Total Pago","Marca Id","Marca Desc"};
      }else if   (objeto.equals("PagoDistinct")){  
-      titulos= new  String []{ "","Id Pago", "Número", "Pago Monto","Monto a Contab.","Fecha", "Tipo", "Cliente","Rut"};
+      titulos= new  String []{ "","Id Pago", "Número", "Pago Monto","Monto a Contab.","Fecha", "Tipo", "Cliente","Rut","Factura"};
      }
       return titulos;
    }
@@ -775,11 +775,6 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
       public List<Pago> getDistinctPagos(List<Pago> pagos){
               
         
-//                           public List<String> getDistinctAreas(){
-//        
-//         return facturasConSaldo.stream().map(x -> x.getAreaCod()).distinct().collect(Collectors.toList());
-//    } 
-          
        List<String> distinctPagosString = pagos.stream().map(x -> 
       x.getIdPago()+","+x.getNumero()+ ","+x.getMontoPagoTotal()+","+x.getMontoPagoPosible()+","+x.getFechaGral()+","+x.getTipo()
                +","+x.getCodigoCliente()+","+x.getRutCliente()
@@ -796,9 +791,10 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
            nuevoPago.setTipo(p.split(",")[5]);
            nuevoPago.setCodigoCliente(p.split(",")[6]);
            nuevoPago.setRutCliente(p.split(",")[7]);
-           
-           distinctPagos.add(nuevoPago);
-                  
+           String listadoFact= this.pagos.stream().filter(  a -> a.getIdPago()== Integer.parseInt(p.split(",")[0])).map(x->Integer.toString(x.getNumDocumento())).collect(Collectors.joining(","));  
+            nuevoPago.setListadoFacturas(listadoFact);
+                    
+                 distinctPagos.add(nuevoPago);     
        }
         
        
