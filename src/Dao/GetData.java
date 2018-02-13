@@ -394,7 +394,7 @@ public class GetData extends Dao {
         for(Pago p:pagosSoftland){
           //  System.out.println("dentro pago"+ p.fecha);
             if (pago.numDocumento==207629){
-                System.out.println("aaaaaaaaaaaaa pago softland "+p.fecha+" monto "+p.monto+ " pago ventas "+pago.fecha+" monto"+pago.monto);  
+                System.out.println("pago softland "+p.fecha+" monto "+p.monto+ " pago ventas "+pago.fecha+" monto"+pago.monto);  
             }
             
            //si dentro del pago existe otro con ese monto y fecha, no contabilizar y marcar con 2

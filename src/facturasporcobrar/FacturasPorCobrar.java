@@ -193,8 +193,11 @@ public class FacturasPorCobrar {
           System.out.println(periodoString);
         
           if(validaFecha(periodo.getjXDatePicker1String())&&validaFecha(periodo.getjXDatePicker2String())){
-           periodoString="'"+periodo.getjXDatePicker1String()+"' and '"+periodo.getjXDatePicker2String()+"'";
+              
           
+           periodoString="'"+periodo.getjXDatePicker1String()+"' and '"+periodo.getjXDatePicker2String()+"'";
+           //dejamos de visualizar el período
+           periodo.setVisible(false);
              if (!panelOpciones.isVisible()){
              
             
@@ -250,7 +253,7 @@ public class FacturasPorCobrar {
           getChecks();                             
       JTextField filename = new JTextField(), dir = new JTextField();
        
-          System.out.println("dentro panel system");
+        
         
         List<String> listaArea= getDistinctAreas();
         List<Integer> listIdPago=getDistinctIdPago();
@@ -288,8 +291,14 @@ public class FacturasPorCobrar {
               for (String area:listaArea){
                 String nombreArchivo = Integer.toString(empresa)+"-"+area;  
                for   (Integer idPago:listIdPago){
-                 List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getPago().getIdPago(),idPago)&&Objects.equals(a.getFactura().getAreaCod(),area)&&(a.getPago().isCkeck())).collect(Collectors.toList());
-                 // List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getFactura().getAreaCod(),area)).collect(Collectors.toList());
+                  
+                   List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getPago().getIdPago(),idPago)&&Objects.equals(a.getFactura().getAreaCod(),area)&&(a.getPago().isCkeck())).collect(Collectors.toList());
+                    
+                   for (FacPago pe:p){
+                   System.out.println("es"+pe.getPago().isCkeck());   
+                   }
+                 
+// List<FacPago> p= getFacPago().stream().filter(  a -> Objects.equals(a.getFactura().getAreaCod(),area)).collect(Collectors.toList());
                  // exportarMovimientos(getFacPago(),filepath,Integer.toString(empresa)+"-"+area);
                
                if (area==null)
@@ -329,7 +338,7 @@ public class FacturasPorCobrar {
             if (e.getSource() instanceof JButton) {
                 //el campo text traerá el id del botón y el proceso, con eso sabremos a que proceso estamos llamando
                 String text = ((JButton) e.getSource()).getName();
-                System.out.println("hola"+ text);
+               
                // si presionan un boton ver mostramos la tabla que corresponda según el id del boton y el proceso
                 muestraTablaProceso(text);
                             
@@ -343,7 +352,7 @@ public class FacturasPorCobrar {
        // en este instante debemos obtener el id del pago mostrado por transVer
        // tiene que estar en la columna 1
       int idPago=Integer.parseInt(transVer.getTableModel().getValueAt(row,1).toString());
-       System.out.println("el id pago seleccionado es"+idPago);
+      
          
        //Llenar la tabla con los pagos correspondientes al id Solicitado
        transPagos.setTitulos(getTitulos("Pago"));
@@ -465,7 +474,7 @@ public class FacturasPorCobrar {
                    Map<Integer, Integer> sum = getPagosContab().stream().collect(
                    Collectors.groupingBy(Pago::getNumDocumento, Collectors.summingInt(Pago::getMontoInt)));
             
-                   System.out.println(sum);
+                  // System.out.println(sum);
                   //por cada tipo de documento se tiene la suma de los pagos, validar si corresponde contabilizar segun el saldo de cada uno
                    sum.forEach((doc,suma)->{
  
@@ -664,10 +673,20 @@ public class FacturasPorCobrar {
            int fila=0;
            int columna=0;
           
+           //Se obtienen los checks de la tabla desde la columna 0, estos pagos estan agrupados segun distinctPagos
            for(Pago p: getDistinctPagos(getPagosContab())){
                p.setCkeck((Boolean)transVer.getTableModel().getValueAt(fila,columna)); // la columna check estara al comienzo columna 0
+   
                System.out.println((Boolean)transVer.getTableModel().getValueAt(fila,columna));
-            fila++;   
+            // se setean los checks a todos los pagos correspondientes (segun los checks de la tabla agrupada distincPagos)
+               for(Pago a:getPagosContab()){
+                if(a.getIdPago()==(Integer)transVer.getTableModel().getValueAt(fila,columna+1)){
+                    a.setCkeck(p.isCkeck());
+                }
+                
+            }
+               
+               fila++;   
            }
            
            
@@ -697,28 +716,19 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
        //Evalua que los pagos por documento coincidan con el monto de los pagos
       public  List<Pago> GetPagosCompletos(List<Pago> lista){
 
-          for(Pago list:lista){
-            if (list.getIdPago()==269773){
-                System.out.println("la lista idPago= "+list.getIdPago()+","+list.getMontoPagoTotalInt()+","+list.getMontoInt());
-            }
-              
-          }
+//          for(Pago list:lista){
+//            if (list.getIdPago()==269773){
+//                System.out.println("la lista idPago= "+list.getIdPago()+","+list.getMontoPagoTotalInt()+","+list.getMontoInt());
+//            }
+//              
+//          }
 
                   
           Map<Integer,Map<Integer, Integer>> sum = lista.stream().collect(
                    Collectors.groupingBy(Pago::getIdPago,Collectors.groupingBy(Pago::getMontoPagoTotalInt,
                            Collectors.summingInt(Pago::getMontoInt))));
-                   
-                    sum.forEach((idPago,suma)->{
-                    if (idPago==269773){
-                        System.out.println("dentro del pago 269773 "+suma.keySet().stream().findFirst().get()+" "+suma.values().stream().findFirst().get());
-                    }
-                    });
-                            
-
 
                    sum.forEach((idPago,suma)->{
-                       System.out.println(idPago+" map"+suma.toString());
                        int montoTotal= suma.keySet().stream().findFirst().get();
                        int montoPago= suma.values().stream().findFirst().get();
                
@@ -730,9 +740,6 @@ Collectors.groupingBy(FacturaXC::getDocInt, Collectors.counting()));
                            if(p.getIdPago()==idPago){
                                p.setEsPagoCompleto(false);
                               
-                               if(p.getIdPago()==269773){
-                                   System.out.println("monto "+montoPago+" "+montoTotal);
-                               }
                                
                                if(montoPago==montoTotal){
                                  p.setEsPagoCompleto(true);
