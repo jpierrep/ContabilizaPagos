@@ -351,7 +351,7 @@ public class FacturasPorCobrar {
    private void rowPressedTable(int row) {
        // en este instante debemos obtener el id del pago mostrado por transVer
        // tiene que estar en la columna 1
-      int idPago=Integer.parseInt(transVer.getTableModel().getValueAt(row,1).toString());
+      int idPago=Integer.parseInt(transVer.getjTable1().getValueAt(row,1).toString());
       
          
        //Llenar la tabla con los pagos correspondientes al id Solicitado
@@ -675,12 +675,12 @@ public class FacturasPorCobrar {
           
            //Se obtienen los checks de la tabla desde la columna 0, estos pagos estan agrupados segun distinctPagos
            for(Pago p: getDistinctPagos(getPagosContab())){
-               p.setCkeck((Boolean)transVer.getTableModel().getValueAt(fila,columna)); // la columna check estara al comienzo columna 0
+               p.setCkeck((Boolean)transVer.getjTable1().getValueAt(fila,columna)); // la columna check estara al comienzo columna 0
    
-               System.out.println((Boolean)transVer.getTableModel().getValueAt(fila,columna));
+               System.out.println((Boolean)transVer.getjTable1().getValueAt(fila,columna));
             // se setean los checks a todos los pagos correspondientes (segun los checks de la tabla agrupada distincPagos)
                for(Pago a:getPagosContab()){
-                if(a.getIdPago()==(Integer)transVer.getTableModel().getValueAt(fila,columna+1)){
+                if(a.getIdPago()==(Integer)transVer.getjTable1().getValueAt(fila,columna+1)){
                     a.setCkeck(p.isCkeck());
                 }
                 

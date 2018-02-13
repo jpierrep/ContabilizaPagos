@@ -9,9 +9,11 @@ package facturasporcobrar;
 import Dao.GetData;
 import Model.FacturaXC;
 import Model.Pago;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.DecimalDV;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JButton;
@@ -34,6 +36,7 @@ public class Transacciones extends javax.swing.JFrame {
   DefaultTableModel tableModel;
   //Nombre de la tabla
   String identificador="";
+
     /**
      * Creates new form Transacciones
      */
@@ -232,13 +235,13 @@ public class Transacciones extends javax.swing.JFrame {
                     case 3:
                         return Integer.class;
                         case 4:
-                     
+                     return Integer.class;
                     default:
                         return String.class;
                 }
             }
           };
-                System.out.println("es pago");
+               
               break;
              }  
             
@@ -267,7 +270,7 @@ public class Transacciones extends javax.swing.JFrame {
                 }
             }
           };
-                System.out.println("es pago");
+              
               break;
              }
             
@@ -288,7 +291,7 @@ public class Transacciones extends javax.swing.JFrame {
                 }
             }
           };
-                  System.out.println(" es factura");
+              
               break;
              }
                      }
@@ -316,8 +319,8 @@ datos[10] = ((Pago) trans).getMarcaDesc();
            datos[0] =  ((Pago) trans).isCkeck();
            datos[1] = ((Pago) trans).getIdPago();
              datos[2] = ((Pago) trans).getNumero();
-            datos[3] = ((Pago) trans).getMontoPagoTotal();
-            datos[4] = ((Pago) trans).getMontoPagoPosible();
+            datos[3] = Integer.parseInt(((Pago) trans).getMontoPagoTotal());
+            datos[4] = Integer.parseInt(((Pago) trans).getMontoPagoPosible());
             datos[5] = ((Pago) trans).getFechaGral();
             datos[6] = ((Pago) trans).getTipoPagoDesc();
             datos[7] = ((Pago) trans).getCodigoCliente();
@@ -326,9 +329,9 @@ datos[10] = ((Pago) trans).getMarcaDesc();
             }
             else  if (trans instanceof FacturaXC){
           
-            datos[0] =  ((FacturaXC) trans).getMovNumDocRef();
-            datos[1] = ((FacturaXC) trans).getSaldo();
-            datos[2] = ((FacturaXC) trans).getCantMov();
+            datos[0] =  Integer.parseInt(((FacturaXC) trans).getMovNumDocRef());
+            datos[1] = Integer.parseInt(((FacturaXC) trans).getSaldo());
+            datos[2] = Integer.parseInt(((FacturaXC) trans).getCantMov());
           datos[3]=((FacturaXC) trans).getMovFe();
           datos[4] = ((FacturaXC) trans).getCodAux();
        
