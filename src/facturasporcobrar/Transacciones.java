@@ -5,7 +5,6 @@
  */
 package facturasporcobrar;
 
-
 import Dao.GetData;
 import Model.FacturaXC;
 import Model.Pago;
@@ -32,27 +31,27 @@ public class Transacciones extends javax.swing.JFrame {
 
     int empresa;
     String[] titulos;
-  Object lista;
-  DefaultTableModel tableModel;
-  //Nombre de la tabla
-  String identificador="";
+    Object lista;
+    DefaultTableModel tableModel;
+    //Nombre de la tabla
+    String identificador = "";
 
     /**
      * Creates new form Transacciones
      */
-   // SystemMannager facturaMannager = new SystemMannager();
-
+    // SystemMannager facturaMannager = new SystemMannager();
     public Transacciones() {
 
         //       super( "JButtonTable Example" );
         initComponents();
         jLabel1.setText("Listado de Facturas con Saldo ERP");
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GuardService Seguridad S.A.","GS Tecnologías S.A.","GS Outsourcing S.A.","Inversiones Odin Ltda."  }));
-     jProgressBar1.setVisible(false);
-     jLabel2.setVisible(false);
-     jTable1.setAutoCreateRowSorter(true);
-      addRowListener();
-     // llenarTabla();
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"GuardService Seguridad S.A.", "GS Tecnologías S.A.", "GS Outsourcing S.A.", "Inversiones Odin Ltda."}));
+        jProgressBar1.setVisible(false);
+        jLabel2.setVisible(false);
+        jTable1.setAutoCreateRowSorter(true);
+         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        addRowListener();
+        // llenarTabla();
 //    DefaultTableModel dm = new DefaultTableModel();
 //    dm.setDataVector(new Object[][]{{"button 1","foo"},
 //                                    {"button 2","bar"}},
@@ -191,10 +190,10 @@ public class Transacciones extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Transacciones transacciones= new Transacciones();
+                Transacciones transacciones = new Transacciones();
                 String[] titulos = {"Nº Transacción", "Fecha Datos", "Nombre Archivo", "Fecha Trans", "Proceso", "Accion"};
                 GetData data = new GetData();
-                List<Pago> listaTrans = data.getPagosSoft(0,"");
+                List<Pago> listaTrans = data.getPagosSoft(0, "");
                 transacciones.llenarTabla();
                 transacciones.setVisible(true);
             }
@@ -212,140 +211,131 @@ public class Transacciones extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void llenarTabla() {
-        
+
         System.out.println("dentro llenar tabla");
 
-        
         Object[] datos = new Object[titulos.length];
-         tableModel=new DefaultTableModel(null, titulos) ;
-         
-        
+        tableModel = new DefaultTableModel(null, titulos);
+
         for (Object trans : (List) lista) {
 
-            if (trans instanceof Pago &&identificador.equals("DISTINCT_PAGO")){
-              tableModel = new DefaultTableModel(null, titulos){   
-            @Override
-            public Class getColumnClass(int column) {
-                 switch (column) {
-                    case 0:
-                        return Boolean.class;
-                     case 1:
-                        return Integer.class;
-                
-                    case 3:
-                        return Integer.class;
-                        case 4:
-                     return Integer.class;
-                    default:
-                        return String.class;
-                }
-            }
-          };
-               
-              break;
-             }  
-            
-         else   if (trans instanceof Pago &&!identificador.equals("DISTINCT_PAGO")){
-              tableModel = new DefaultTableModel(null, titulos){   
-            @Override
-            public Class getColumnClass(int column) {
-                 switch (column) {
-                    case 0:
-                        return Integer.class;
-                     case 1:
-                        return Integer.class;
-                    case 2:
-                        return Integer.class;
-                    case 3:
-                        return Integer.class;
-                        case 4:
-                        return Integer.class;
-                        case 7:
-                        return Integer.class;
-                       case 8:
-                        return Integer.class;
+            if (trans instanceof Pago && identificador.equals("DISTINCT_PAGO")) {
+                tableModel = new DefaultTableModel(null, titulos) {
+                    @Override
+                    public Class getColumnClass(int column) {
+                        switch (column) {
+                            case 0:
+                                return Boolean.class;
+                            case 1:
+                                return Integer.class;
 
-                    default:
-                        return String.class;
-                }
+                            case 3:
+                                return Integer.class;
+                            case 4:
+                                return Integer.class;
+                            default:
+                                return String.class;
+                        }
+                    }
+                };
+
+                break;
+            } else if (trans instanceof Pago && !identificador.equals("DISTINCT_PAGO")) {
+                tableModel = new DefaultTableModel(null, titulos) {
+                    @Override
+                    public Class getColumnClass(int column) {
+                        switch (column) {
+                            case 0:
+                                return Integer.class;
+                            case 1:
+                                return Integer.class;
+                            case 2:
+                                return Integer.class;
+                            case 3:
+                                return Integer.class;
+                            case 4:
+                                return Integer.class;
+                            case 7:
+                                return Integer.class;
+                            case 8:
+                                return Integer.class;
+
+                            default:
+                                return String.class;
+                        }
+                    }
+                };
+
+                break;
+            } else if (trans instanceof FacturaXC) {
+                tableModel = new DefaultTableModel(null, titulos) {
+                    @Override
+                    public Class getColumnClass(int column) {
+                        switch (column) {
+                            case 0:
+                                return Integer.class;
+                            case 1:
+                                return Integer.class;
+                            case 2:
+                                return Integer.class;
+
+                            default:
+                                return String.class;
+                        }
+                    }
+                };
+
+                break;
             }
-          };
-              
-              break;
-             }
-            
-            else if (trans instanceof FacturaXC){
-              tableModel = new DefaultTableModel(null, titulos){   
-            @Override
-            public Class getColumnClass(int column) {
-                 switch (column) {
-                    case 0:
-                        return Integer.class;
-                    case 1:
-                        return Integer.class;
-                    case 2:
-                        return Integer.class;
-                        
-                    default:
-                        return String.class;
-                }
-            }
-          };
-              
-              break;
-             }
-                     }
-   
-        
-       
+        }
+
         for (Object trans : (List) lista) {
-            if (trans instanceof Pago &&!identificador.equals("DISTINCT_PAGO")){
-            datos[0] = ((Pago) trans).getIdPago();
-            datos[1] = ((Pago) trans).getIdDocumento();
-            datos[2]= ((Pago) trans).getNumDocumento(); 
-            datos[3] = ((Pago) trans).getSoftCantMovim();
-            datos[4] = ((Pago) trans).getSoftSaldo();  
-            datos[5]=((Pago) trans).getSoftMinFecha();
-            
-            datos[6]=((Pago) trans).getFecha();
-            datos[7] = ((Pago) trans).getMonto();
-            datos[8] = ((Pago) trans).getMontoPagoTotal();
-datos[9] = ((Pago) trans).getMarca();
-datos[10] = ((Pago) trans).getMarcaDesc();
+            if (trans instanceof Pago && !identificador.equals("DISTINCT_PAGO")) {
+                datos[0] = ((Pago) trans).getIdPago();
+                datos[1] = ((Pago) trans).getIdDocumento();
+                datos[2] = ((Pago) trans).getNumDocumento();
+                datos[3] = ((Pago) trans).getSoftCantMovim();
+                datos[4] = ((Pago) trans).getSoftSaldo();
+                datos[5] = ((Pago) trans).getSoftMinFecha();
+
+                datos[6] = ((Pago) trans).getFecha();
+                datos[7] = ((Pago) trans).getMonto();
+                datos[8] = ((Pago) trans).getMontoPagoTotal();
+                datos[9] = ((Pago) trans).getMarca();
+                datos[10] = ((Pago) trans).getMarcaDesc();
+
 //datos[11]= ((Pago) trans).isCkeck();
-            tableModel.addRow(datos);
+                tableModel.addRow(datos);
+            } else if (trans instanceof Pago && identificador.equals("DISTINCT_PAGO")) {
+                datos[0] = ((Pago) trans).isCkeck();
+                datos[1] = ((Pago) trans).getIdPago();
+                datos[2] = ((Pago) trans).getNumero();
+                datos[3] = Integer.parseInt(((Pago) trans).getMontoPagoTotal());
+                datos[4] = Integer.parseInt(((Pago) trans).getMontoPagoPosible());
+                datos[5] = ((Pago) trans).getFechaGral();
+                datos[6] = ((Pago) trans).getTipoPagoDesc();
+                datos[7] = ((Pago) trans).getCodigoCliente();
+                datos[8] = ((Pago) trans).getRutCliente();
+                datos[9] = ((Pago) trans).getListadoFacturas();
+                datos[10] = ((Pago) trans).getNombreDocto();
+                tableModel.addRow(datos);
+            } else if (trans instanceof FacturaXC) {
+
+                datos[0] = Integer.parseInt(((FacturaXC) trans).getMovNumDocRef());
+                datos[1] = Integer.parseInt(((FacturaXC) trans).getSaldo());
+                datos[2] = Integer.parseInt(((FacturaXC) trans).getCantMov());
+                datos[3] = ((FacturaXC) trans).getMovFe();
+                datos[4] = ((FacturaXC) trans).getCodAux();
+
+                datos[5] = ((FacturaXC) trans).getRutAux();
+                datos[6] = ((FacturaXC) trans).getNomAux();
+
+                tableModel.addRow(datos);
             }
-       else  if (trans instanceof Pago &&identificador.equals("DISTINCT_PAGO")){
-           datos[0] =  ((Pago) trans).isCkeck();
-           datos[1] = ((Pago) trans).getIdPago();
-             datos[2] = ((Pago) trans).getNumero();
-            datos[3] = Integer.parseInt(((Pago) trans).getMontoPagoTotal());
-            datos[4] = Integer.parseInt(((Pago) trans).getMontoPagoPosible());
-            datos[5] = ((Pago) trans).getFechaGral();
-            datos[6] = ((Pago) trans).getTipoPagoDesc();
-            datos[7] = ((Pago) trans).getCodigoCliente();
-            datos[8] = ((Pago) trans).getRutCliente();
-           datos[9] = ((Pago) trans).getListadoFacturas();
-            tableModel.addRow(datos);
-            }
-            else  if (trans instanceof FacturaXC){
-          
-            datos[0] =  Integer.parseInt(((FacturaXC) trans).getMovNumDocRef());
-            datos[1] = Integer.parseInt(((FacturaXC) trans).getSaldo());
-            datos[2] = Integer.parseInt(((FacturaXC) trans).getCantMov());
-          datos[3]=((FacturaXC) trans).getMovFe();
-          datos[4] = ((FacturaXC) trans).getCodAux();
-       
-            datos[5] = ((FacturaXC) trans).getRutAux();
-            datos[6] = ((FacturaXC) trans).getNomAux();
-            
-            tableModel.addRow(datos);
-            }
-           
 
         }
 
-      jTable1.setModel(tableModel);
+        jTable1.setModel(tableModel);
 
     }
 
@@ -428,23 +418,21 @@ datos[10] = ((Pago) trans).getMarcaDesc();
     public void setjTable1(JTable jTable1) {
         this.jTable1 = jTable1;
     }
-    
-  
-    public void addRowListener(){
-    jTable1.addMouseListener(new MouseAdapter() {
-    public void mousePressed(MouseEvent mouseEvent) {
-        JTable table =(JTable) mouseEvent.getSource();
-        Point point = mouseEvent.getPoint();
-        int row = table.rowAtPoint(point);
-        if (mouseEvent.getClickCount() == 2) {
-            // your valueChanged overridden method 
-            System.out.println(" holaa");
-            System.out.println("row "+row);
-        }
-    }
-});
-    
-    
+
+    public void addRowListener() {
+        jTable1.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2) {
+                    // your valueChanged overridden method 
+                    System.out.println(" holaa");
+                    System.out.println("row " + row);
+                }
+            }
+        });
+
     }
 
     public String getIdentificador() {
@@ -454,6 +442,5 @@ datos[10] = ((Pago) trans).getMarcaDesc();
     public void setIdentificador(String identificador) {
         this.identificador = identificador;
     }
-    
 
 }

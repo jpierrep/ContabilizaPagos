@@ -15,34 +15,37 @@ import java.util.Date;
  * @author jpierre
  */
 public class Pago {
-   public int idDocumento;
-   public int numDocumento; 
-   public int idPago;
-   public String monto;
-   //fecha de la tabla registro Enlaze
-   public String fecha;
-   //fecha de la tabla registro DocPago
-   public String fechaGral;
-   public String tipo;
-   public String numero;
-   public String rutCliente;
-   public String codigoCliente;
-   
-   public int SoftCantMovim;
-   public int  SoftSaldo;
-   public String SoftMinFecha;
-   public int marca;
-   //check que dice si contabilizar o no realmente
-   public boolean ckeck=true;
-   //corresponde al monto total segun id pago
-   public String montoPagoTotal;
-   //corresponde al monto del pago posible de contabilizar
-   public String montoPagoPosible;
-   public boolean esPagoCompleto=false;
-   //Cuando un pago tiene varias facturas, se añade acá el listado separado por coma
-   public String ListadoFacturas;
-   public String glosa;
 
+    public int idDocumento;
+    public int numDocumento;
+    public int idPago;
+    public String monto;
+    //fecha de la tabla registro Enlaze
+    public String fecha;
+    //fecha de la tabla registro DocPago
+    public String fechaGral;
+    public String tipo;
+    public String numero;
+    public String rutCliente;
+    public String codigoCliente;
+
+    public int SoftCantMovim;
+    public int SoftSaldo;
+    public String SoftMinFecha;
+    public int marca;
+    //check que dice si contabilizar o no realmente
+    public boolean ckeck = true;
+    //corresponde al monto total segun id pago
+    public String montoPagoTotal;
+    //corresponde al monto del pago posible de contabilizar
+    public String montoPagoPosible;
+    public boolean esPagoCompleto = false;
+    //Cuando un pago tiene varias facturas, se añade acá el listado separado por coma
+    public String ListadoFacturas;
+    //Glosa del documento en softland que se esta pagando
+    public String glosa;
+    public String nombreDocto ;
+    
     public Pago() {
     }
 
@@ -55,7 +58,7 @@ public class Pago {
     }
 
     public Pago(int idDocumento, int numDocumento, int idPago, String monto, String fecha, int SoftCantMovim, int SoftSaldo, String SoftUltFecha, String montoPagoTotal) {
-       
+
         this.idDocumento = idDocumento;
         this.numDocumento = numDocumento;
         this.idPago = idPago;
@@ -64,7 +67,7 @@ public class Pago {
         this.SoftCantMovim = SoftCantMovim;
         this.SoftSaldo = SoftSaldo;
         this.SoftMinFecha = SoftUltFecha;
-        this.montoPagoTotal=montoPagoTotal;
+        this.montoPagoTotal = montoPagoTotal;
     }
 
     public int getIdDocumento() {
@@ -94,10 +97,10 @@ public class Pago {
     public String getMonto() {
         return monto;
     }
+
     public int getMontoInt() {
         return Integer.parseInt(monto);
     }
-
 
     public void setMonto(String monto) {
         this.monto = monto;
@@ -142,53 +145,57 @@ public class Pago {
     public void setCkeck(boolean ckeck) {
         this.ckeck = ckeck;
     }
-   
-    
-   
-   public String getMarcaDesc(){
-                    String marcaDesc="";
-                    switch (marca){
-                        case 0: marcaDesc="Saldo Negativo";
-                           break;
-                        case 1: marcaDesc="Factura Sin Mov.";
-                           break;  
-                             case 2: marcaDesc="Pago Existente";
-                           break;
-                        case 3: marcaDesc="Monto Existente";
-                           break;  
-                             case 4: marcaDesc="Factura con Mov./No reg. Pago";
-                           break;
-                        case 7: marcaDesc="Contab/Pagos menor que Saldo";
-                           break;  
-                        case 8: marcaDesc="Contab/Pago dentro de Saldo";
-                           break;   
-                        case 9: marcaDesc="Contab/Pago fuera de Saldo";
-                           break;       
-                                
-                        
-                    }
-                    
-                    return marcaDesc;
-                    
-                }
-    
-    public String getFechaFormat() throws ParseException{
-         java.util.Date utilDate = new java.util.Date();
- DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
- Date fechaFormat=df.parse(fecha);
- 
- DateFormat dfResult = new SimpleDateFormat("dd/MM/yyyy");
- String fechaString=dfResult.format(fechaFormat);
- return fechaString;
- 
-  
+
+    public String getMarcaDesc() {
+        String marcaDesc = "";
+        switch (marca) {
+            case 0:
+                marcaDesc = "Saldo Negativo";
+                break;
+            case 1:
+                marcaDesc = "Factura Sin Mov.";
+                break;
+            case 2:
+                marcaDesc = "Pago Existente";
+                break;
+            case 3:
+                marcaDesc = "Monto Existente";
+                break;
+            case 4:
+                marcaDesc = "Factura con Mov./No reg. Pago";
+                break;
+            case 7:
+                marcaDesc = "Contab/Pagos menor que Saldo";
+                break;
+            case 8:
+                marcaDesc = "Contab/Pago dentro de Saldo";
+                break;
+            case 9:
+                marcaDesc = "Contab/Pago fuera de Saldo";
+                break;
+
+        }
+
+        return marcaDesc;
+
+    }
+
+    public String getFechaFormat() throws ParseException {
+        java.util.Date utilDate = new java.util.Date();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        Date fechaFormat = df.parse(fecha);
+
+        DateFormat dfResult = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaString = dfResult.format(fechaFormat);
+        return fechaString;
+
     }
 
     public String getMontoPagoTotal() {
         return montoPagoTotal;
     }
-    
-        public int getMontoPagoTotalInt() {
+
+    public int getMontoPagoTotalInt() {
         return Integer.parseInt(montoPagoTotal);
     }
 
@@ -207,7 +214,8 @@ public class Pago {
     public String getMontoPagoPosible() {
         return montoPagoPosible;
     }
-      public int getMontoPagoPosibleInt() {
+
+    public int getMontoPagoPosibleInt() {
         return Integer.parseInt(montoPagoPosible);
     }
 
@@ -255,40 +263,46 @@ public class Pago {
         this.codigoCliente = codigoCliente;
     }
 
-    
-    public String getTipoPagoDesc(){
-        String tipoPagoDesc="";
-   int tipoInt=Integer.parseInt(tipo);
-        
-        switch (tipoInt){
-            
-          
- case  1:  tipoPagoDesc= "Cheque";
- break;
- case  2:  tipoPagoDesc= "Efectivo";
-  break;
- case  3:  tipoPagoDesc= "Tarjeta de Crédito";
-  break;
- case  4:  tipoPagoDesc= "Nota de Crédito";
-  break;
- case  5:  tipoPagoDesc= "Cheque Fiscal";
-  break;
- case  6:  tipoPagoDesc= "Depósito Directo";
-  break;
- case  7:  tipoPagoDesc= "Ajuste Positivo";
-  break;
- case  8:  tipoPagoDesc= "Castigo";
-  break;
- case  9:  tipoPagoDesc= "Vale Vista";
-  break;
- case  10:  tipoPagoDesc= "Servipag";
-  break;      
+    public String getTipoPagoDesc() {
+        String tipoPagoDesc = "";
+        int tipoInt = Integer.parseInt(tipo);
+
+        switch (tipoInt) {
+
+            case 1:
+                tipoPagoDesc = "Cheque";
+                break;
+            case 2:
+                tipoPagoDesc = "Efectivo";
+                break;
+            case 3:
+                tipoPagoDesc = "Tarjeta de Crédito";
+                break;
+            case 4:
+                tipoPagoDesc = "Nota de Crédito";
+                break;
+            case 5:
+                tipoPagoDesc = "Cheque Fiscal";
+                break;
+            case 6:
+                tipoPagoDesc = "Depósito Directo";
+                break;
+            case 7:
+                tipoPagoDesc = "Ajuste Positivo";
+                break;
+            case 8:
+                tipoPagoDesc = "Castigo";
+                break;
+            case 9:
+                tipoPagoDesc = "Vale Vista";
+                break;
+            case 10:
+                tipoPagoDesc = "Servipag";
+                break;
         }
-        
-        
+
         return tipoPagoDesc;
-        
-        
+
     }
 
     public String getListadoFacturas() {
@@ -307,8 +321,15 @@ public class Pago {
         this.glosa = glosa;
     }
 
+    public String getNombreDocto() {
+        return nombreDocto;
+    }
 
-    
-    
+    public void setNombreDocto(String nombreDocto) {
+        this.nombreDocto = nombreDocto;
+    }
+
+
+
     
 }

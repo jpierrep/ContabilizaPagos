@@ -24,14 +24,14 @@ public class FechasPago extends javax.swing.JFrame {
      */
     public FechasPago() {
         initComponents();
-       Calendar cal = Calendar.getInstance();
-cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-Date lastDayOfMonth = cal.getTime();
-cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
-Date FirstDayOfMonth = cal.getTime();
-jXDatePicker1.setDate(FirstDayOfMonth);        
-jXDatePicker2.setDate(lastDayOfMonth);
-        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+        Date lastDayOfMonth = cal.getTime();
+        cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
+        Date FirstDayOfMonth = cal.getTime();
+        jXDatePicker1.setDate(FirstDayOfMonth);
+        jXDatePicker2.setDate(lastDayOfMonth);
+
     }
 
     /**
@@ -204,29 +204,26 @@ jXDatePicker2.setDate(lastDayOfMonth);
 
     public String getjXDatePicker2String() {
 
- 
- DateFormat dfResult = new SimpleDateFormat("yyyyMMdd");
- String fechaString=dfResult.format(jXDatePicker2.getDate());
- if(fechaString!=null&&!fechaString.isEmpty())
-    return fechaString;
- 
- return "";
-  
+        DateFormat dfResult = new SimpleDateFormat("yyyyMMdd");
+        String fechaString = dfResult.format(jXDatePicker2.getDate());
+        if (fechaString != null && !fechaString.isEmpty()) {
+            return fechaString;
+        }
+
+        return "";
+
     }
-    
-        public String getjXDatePicker1String()  {
 
+    public String getjXDatePicker1String() {
 
- 
- DateFormat dfResult = new SimpleDateFormat("yyyyMMdd");
+        DateFormat dfResult = new SimpleDateFormat("yyyyMMdd");
 
- String fechaString=dfResult.format(jXDatePicker1.getDate());
- if(fechaString!=null&&!fechaString.isEmpty())
-    return fechaString;
-  return "";
+        String fechaString = dfResult.format(jXDatePicker1.getDate());
+        if (fechaString != null && !fechaString.isEmpty()) {
+            return fechaString;
+        }
+        return "";
 
- 
-  
     }
 
 }

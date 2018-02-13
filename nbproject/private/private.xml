@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/facturasporcobrar/FechasPago.java</file>
             <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/Dao/GetData.java</file>
-            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/Model/Opciones.java</file>
+            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/facturasporcobrar/FechasPago.java</file>
+            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/Model/FacturaXC.java</file>
+            <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/facturasporcobrar/PanelOpciones.java</file>
             <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/facturasporcobrar/FacturasPorCobrar.java</file>
             <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/Model/Pago.java</file>
             <file>file:/C:/Users/jpierre/Documents/NetBeansProjects/ContabilizaPagos-master/ContabilizaPagos-master/src/facturasporcobrar/Transacciones.java</file>

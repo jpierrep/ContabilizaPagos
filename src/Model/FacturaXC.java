@@ -10,7 +10,7 @@ package Model;
  * @author jpierre
  */
 public class FacturaXC {
-    
+
     String rutAux;
     String nomAux;
     String codAux;
@@ -32,18 +32,16 @@ public class FacturaXC {
     public FacturaXC() {
     }
 
-    public FacturaXC(String rutAux, String nomAux,String codAux, String movFe, String movNumDocRef, String saldo, String cantMov) {
+    public FacturaXC(String rutAux, String nomAux, String codAux, String movFe, String movNumDocRef, String saldo, String cantMov) {
         this.rutAux = rutAux;
         this.nomAux = nomAux;
-        this.codAux=codAux;
+        this.codAux = codAux;
         this.movFe = movFe;
         this.movNumDocRef = movNumDocRef;
         this.saldo = saldo;
         this.cantMov = cantMov;
     }
 
-    
-    
     public String getRutAux() {
         return rutAux;
     }
@@ -55,8 +53,8 @@ public class FacturaXC {
     public String getNomAux() {
         return nomAux;
     }
-    
-     public String getNomAuxSinComas() {
+
+    public String getNomAuxSinComas() {
         return nomAux.replace(",", "");
     }
 
@@ -176,16 +174,15 @@ public class FacturaXC {
         this.cantMov = cantMov;
     }
 
-    
-    public String getAnio(){
-        return movFe.substring(1,4);
+    public String getAnio() {
+        return movFe.substring(1, 4);
     }
-       
-    public String getMes(){
-        return movFe.substring(6,2);
+
+    public String getMes() {
+        return movFe.substring(6, 2);
     }
-    
-        public int getDocInt() {
+
+    public int getDocInt() {
         return Integer.parseInt(movNumDocRef);
     }
 
@@ -197,5 +194,4 @@ public class FacturaXC {
         this.areaCod = areaCod;
     }
 
-        
 }

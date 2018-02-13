@@ -34,29 +34,23 @@ public class PanelOpciones extends JFrame {
 
     String[] cabeceraArchivo;
     int cantidadColumnas;
-    List<Opciones> listaOpciones=new ArrayList<>();
+    List<Opciones> listaOpciones = new ArrayList<>();
 
-    
     JButton button1 = new JButton("Generar Archivos");
     JLabel[] jlabels;
     JTextField[] jtext;
     JButton[] jbuttons;
 
+    public PanelOpciones(String Proceso, List<Opciones> lista) {
 
-    
-
-    public PanelOpciones(String Proceso,List<Opciones> lista ) {
-        
-       
-      // Nombre  super("JPanel Demo Program");
-
-             this.listaOpciones=lista;
-         cantidadColumnas=listaOpciones.size();
+        // Nombre  super("JPanel Demo Program");
+        this.listaOpciones = lista;
+        cantidadColumnas = listaOpciones.size();
 //         cabeceraArchivo=new String[3];
 //         cabeceraArchivo[0]="1";
 //        cabeceraArchivo[1]="2";
 //        cabeceraArchivo[2]="3";
-         
+
         jlabels = new JLabel[cantidadColumnas];
         jtext = new JTextField[cantidadColumnas];
         jbuttons = new JButton[cantidadColumnas];
@@ -84,16 +78,16 @@ public class PanelOpciones extends JFrame {
          */
 
         for (int i = 0; i < cantidadColumnas; i++) {
-            jlabels[i] = new JLabel((i + 1) + ". " + listaOpciones.get(i).getEtiqueta()+" "+listaOpciones.get(i).getValor());
+            jlabels[i] = new JLabel((i + 1) + ". " + listaOpciones.get(i).getEtiqueta() + " " + listaOpciones.get(i).getValor());
             jtext[i] = new JTextField(5);
-            jbuttons[i]= new JButton("Ver");
-           
+            jbuttons[i] = new JButton("Ver");
+
             jbuttons[i].addActionListener(listener);
-            jbuttons[i].setName(i+" "+Proceso);
-            if(!listaOpciones.get(i).isHasButton()){
-              jbuttons[i].setVisible(false);
-            }else if(Integer.parseInt(listaOpciones.get(i).getValor())==0){
-              jbuttons[i].setEnabled(false);  
+            jbuttons[i].setName(i + " " + Proceso);
+            if (!listaOpciones.get(i).isHasButton()) {
+                jbuttons[i].setVisible(false);
+            } else if (Integer.parseInt(listaOpciones.get(i).getValor()) == 0) {
+                jbuttons[i].setEnabled(false);
             }
             constraints.gridx = 0;
             ++constraints.gridy;
@@ -119,12 +113,11 @@ public class PanelOpciones extends JFrame {
 
             private void jButtonActionPerformed(ActionEvent evt) {
                 System.out.println("boton opciones");
-             
+
 //                for (int i = 0; i < 7; i++) {
 //                    System.out.println(jtext[i].getText());
 //
 //                }
-
             }
         });
 
@@ -168,35 +161,33 @@ public class PanelOpciones extends JFrame {
         return "'" + String.join("','", textvar) + "'";
 
     }
-    
-     ActionListener listener = new ActionListener() {
+
+    ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
                 String text = ((JButton) e.getSource()).getName();
-          //      JOptionPane.showMessageDialog(null, text);
+                //      JOptionPane.showMessageDialog(null, text);
             }
         }
     };
-    
-    
-    
+
     public static void main(String[] args) {
         // TODO code application logic here
-  //  set look and feel to the system look and feel
+        //  set look and feel to the system look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-         
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-               // new PanelOpciones("").setVisible(true);
+                // new PanelOpciones("").setVisible(true);
             }
         });
-    
+
     }
 
     public void setJbuttons(JButton[] jbuttons) {
@@ -223,9 +214,4 @@ public class PanelOpciones extends JFrame {
         this.button1 = button1;
     }
 
-   
-
-
-    
-    
 }
