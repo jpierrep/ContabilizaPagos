@@ -39,10 +39,8 @@ public class Dao {
             //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ppf?user=pma&password=pmapass");
             
           
-            
-           con = DriverManager.getConnection("jdbc:sqlserver://192.168.100.14;databaseName=Inteligencias", "targit", "targit2015*");
-           //    con = DriverManager.getConnection("jdbc:sqlserver://Contab");
-             
+       //aqui va la linea de conexion a base de datos     
+
           
             
             
